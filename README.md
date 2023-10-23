@@ -5,4 +5,4 @@
 3. **Contributors**
    - Mincheol Kang
    - Seungtae Kim
-   - Yeongjin Park
+   - Youngjin Park (202011083)
