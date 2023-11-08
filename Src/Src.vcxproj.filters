@@ -13,10 +13,45 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="헤더 파일\Transactions">
+      <UniqueIdentifier>{c8a74fc6-d7e2-47e7-8321-fcf37586fb8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Customer">
+      <UniqueIdentifier>{e566c073-895e-4400-badc-db4155a9d408}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bank.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ATM.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Transaction.h">
+      <Filter>헤더 파일\Transactions</Filter>
+    </ClInclude>
+    <ClInclude Include="TransactionWithdrawal.h">
+      <Filter>헤더 파일\Transactions</Filter>
+    </ClInclude>
+    <ClInclude Include="TransactionTransfer.h">
+      <Filter>헤더 파일\Transactions</Filter>
+    </ClInclude>
+    <ClInclude Include="TransantionDeposit.h">
+      <Filter>헤더 파일\Transactions</Filter>
+    </ClInclude>
+    <ClInclude Include="Customer.h">
+      <Filter>헤더 파일\Customer</Filter>
+    </ClInclude>
+    <ClInclude Include="Account.h">
+      <Filter>헤더 파일\Customer</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>헤더 파일\Customer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
