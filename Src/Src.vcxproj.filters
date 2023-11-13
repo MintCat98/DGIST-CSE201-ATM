@@ -35,15 +35,6 @@
     <ClInclude Include="Transaction.h">
       <Filter>헤더 파일\Transactions</Filter>
     </ClInclude>
-    <ClInclude Include="TransactionWithdrawal.h">
-      <Filter>헤더 파일\Transactions</Filter>
-    </ClInclude>
-    <ClInclude Include="TransactionTransfer.h">
-      <Filter>헤더 파일\Transactions</Filter>
-    </ClInclude>
-    <ClInclude Include="TransantionDeposit.h">
-      <Filter>헤더 파일\Transactions</Filter>
-    </ClInclude>
     <ClInclude Include="Customer.h">
       <Filter>헤더 파일\Customer</Filter>
     </ClInclude>

@@ -136,9 +136,6 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="ATM.h" />
     <ClInclude Include="Transaction.h" />
-    <ClInclude Include="TransactionWithdrawal.h" />
-    <ClInclude Include="TransactionTransfer.h" />
-    <ClInclude Include="TransantionDeposit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
