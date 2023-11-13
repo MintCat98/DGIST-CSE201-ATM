@@ -18,4 +18,8 @@ public:
 	virtual ~Transaction();
 	void updateInfo();
 	void getInfo();
+	// Actions
+	void deposit();
+	void withdrawal();
+	void transfer();
 };

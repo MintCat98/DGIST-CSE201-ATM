@@ -19,9 +19,33 @@
     <Filter Include="헤더 파일\Customer">
       <UniqueIdentifier>{e566c073-895e-4400-badc-db4155a9d408}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Customer">
+      <UniqueIdentifier>{fd71c9a7-03e4-46a7-8c72-662262a5fcba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Transactions">
+      <UniqueIdentifier>{b3d2cbda-8470-4a2e-b667-cf3aca71b1ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Account.cpp">
+      <Filter>소스 파일\Customer</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>소스 파일\Customer</Filter>
+    </ClCompile>
+    <ClCompile Include="Customer.cpp">
+      <Filter>소스 파일\Customer</Filter>
+    </ClCompile>
+    <ClCompile Include="Transaction.cpp">
+      <Filter>소스 파일\Transactions</Filter>
+    </ClCompile>
+    <ClCompile Include="ATM.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Bank.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
