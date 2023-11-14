@@ -134,6 +134,7 @@
     <ClCompile Include="Transaction.cpp" />
     <ClCompile Include="ATM.cpp" />
     <ClCompile Include="Bank.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bank.h" />

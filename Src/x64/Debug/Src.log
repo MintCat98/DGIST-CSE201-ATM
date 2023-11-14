@@ -1,0 +1,51 @@
+﻿  main.cpp
+  Account.cpp
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(3,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(4,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Card.h(5,21): error C2504: 'Account': 기본 클래스를 정의하지 않았습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,9): error C3646: 'transType': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,18): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,9): error C3646: 'customerName': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,21): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(16,11): error C2061: 구문 오류: 식별자 'string'
+  Card.cpp
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(3,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(4,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,9): error C3646: 'transType': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,18): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,9): error C3646: 'customerName': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,21): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(16,11): error C2061: 구문 오류: 식별자 'string'
+  Customer.cpp
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(3,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(4,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,9): error C3646: 'transType': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,18): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  Transaction.cpp
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(3,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,9): error C3646: 'customerName': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,21): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(16,11): error C2061: 구문 오류: 식별자 'string'
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(4,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  ATM.cpp
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(3,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,9): error C3646: 'transType': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,18): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,9): error C3646: 'customerName': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,21): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(16,11): error C2061: 구문 오류: 식별자 'string'
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(4,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  Bank.cpp
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(3,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(4,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,9): error C3646: 'customerName': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(11,21): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Customer.h(16,11): error C2061: 구문 오류: 식별자 'string'
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,9): error C3646: 'transType': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,18): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  test.cpp
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(3,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\ATM.h(4,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,9): error C3646: 'transType': 알 수 없는 재정의 지정자입니다.
+C:\Users\presi\git_laptop\Project\DGIST-CSE201-ATM\Src\Transaction.h(13,18): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  코드를 생성하고 있습니다...
