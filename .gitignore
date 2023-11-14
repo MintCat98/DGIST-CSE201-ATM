@@ -35,4 +35,7 @@
 *.out
 *.app
 
+# Test File
+Src/test.cpp
+
 # End of https://www.toptal.com/developers/gitignore/api/c++
