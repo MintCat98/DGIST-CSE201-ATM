@@ -14,6 +14,8 @@ private:
 	string bankName;
 	ATM* atmList[100];
 	Customer* customerList[1000];
+	bool isPrimaryBank;
+	
 public:
 	// Bank
 	Bank();

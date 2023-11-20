@@ -15,13 +15,17 @@ private:
 	Customer* ownedBy;
 	int balance;
 	Transaction* accountHistory; // dynamic allocation
+	bool isCardPrimary;
 public:
 	// Account
 	Account();
 	virtual ~Account();
-	void getAccountNum();
+	int getAccountNum();
 	void getBankName();
 	void getOwner();
+	int getbalance();
+	void setbalance(int changedbalance);
 	void updateBalance();
 	void updateHistory();
+	bool getPrimary();
 };

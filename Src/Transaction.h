@@ -2,24 +2,29 @@
 
 #include "ATM.h"
 #include "Card.h"
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
 
 class ATM;
 class Card;
 
 class Transaction {
 private:
-	const int transactionID;
-	Card* cardNum;
+	int transactionID;
+	int cardNum;
+	int serialNum;
 	string transType;
 	int transAmount;
 public:
-	// Transaction
-	Transaction();
+	Transaction(ATM* serialNumber,Card* cardNumber, string type );
 	virtual ~Transaction();
-	void updateInfo();
-	void getInfo();
 	// Actions
-	void deposit();
-	void withdrawal();
-	void transfer();
+	void deposit(ATM* serialNumber,Card* cardNumber);
+	void withdrawal(ATM* serialNumber,Card* cardNumber);
+	void cashtransfer(ATM* serialNumber, Account* accountNumberTo);
+	void transfer(ATM* serialNumber, Account* accountNumberFrom, Account* accountNumberTo);
+	void addcash(ATM* serialNumber, Card* cardNumber);
+	void addcheck(ATM* serialNumber, Card* cardNumber);
 };
