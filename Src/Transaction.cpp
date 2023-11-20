@@ -167,5 +167,74 @@ void Transaction::cashtransfer(ATM* serialNumber, Account* accountNumberTo) {
 }
 
 void Transaction::transfer(ATM* serialNumber, Account* accountNumberFrom, Account* accountNumberTo) {
+	if (accountNumberFrom->getPrimary() == true && accountNumberTo->getPrimary() == true) {
+		cout << "Transfer fee : KRW 2,000" << endl;
+		if (accountNumberFrom->getbalance() > 2000) {
+			accountNumberFrom->setbalance(accountNumberFrom->getbalance() - 2000);
+			cout << " how much money? " << endl;
+			int money;
+			cin >> money;
+			if (accountNumberFrom->getbalance() >= money) {
+				accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
+				accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
+				ofstream history("transaction_history.txt");
+				if (history.is_open()) {
+					history << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+				history.close();
+			}
+			else {
+				cout << "Not enough money." << endl;
+			}
+		}
+		else {
+			cout << " Not enough money." << endl;
+		}
+	}
+	else if (accountNumberFrom->getPrimary() != accountNumberTo->getPrimary()) {
+		cout << "Transfer fee : KRW 3,000" << endl;
+		if (accountNumberFrom->getbalance() > 3000) {
+			accountNumberFrom->setbalance(accountNumberFrom->getbalance() - 3000);
+			cout << " how much money? " << endl;
+			int money;
+			cin >> money;
+			if (accountNumberFrom->getbalance() >= money) {
+				accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
+				accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
+				ofstream history("transaction_history.txt");
+				if (history.is_open()) {
+					history << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+					history.close();
+				}
+				else {
+					cout << "Not enough money." << endl;
+				}
+		}
 
+		else {
+			cout << " Not enough money." << endl;
+		}
+	}
+	else {
+		cout << "Transfer fee : KRW 4,000" << endl;
+		if (accountNumberFrom->getbalance() > 4000) {
+			accountNumberFrom->setbalance(accountNumberFrom->getbalance() - 4000);
+			cout << " how much money? " << endl;
+			int money;
+			cin >> money;
+			if (accountNumberFrom->getbalance() >= money) {
+				accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
+				accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
+				ofstream history("transaction_history.txt");
+				if (history.is_open()) {
+					history << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+					history.close();
+				}
+				else {
+					cout << "Not enough money." << endl;
+				}
+		}
+		else {
+			cout << " Not enough money." << endl;
+		}
+	}
 }
