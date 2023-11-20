@@ -36,9 +36,6 @@
     <ClCompile Include="Card.cpp">
       <Filter>소스 파일\Customer</Filter>
     </ClCompile>
-    <ClCompile Include="Customer.cpp">
-      <Filter>소스 파일\Customer</Filter>
-    </ClCompile>
     <ClCompile Include="Transaction.cpp">
       <Filter>소스 파일\Transactions</Filter>
     </ClCompile>
@@ -50,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="test.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Customer.cpp">
+      <Filter>소스 파일\Customer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="Card.h">
       <Filter>헤더 파일\Customer</Filter>
+    </ClInclude>
+    <ClInclude Include="CashSlots.h">
+      <Filter>헤더 파일\Transactions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
