@@ -1,0 +1,5 @@
+# ninja log v5
+3	457	1700305323516027332	CMakeFiles/Src.dir/main.cpp.o	65ef4f4143bea488
+2	562	1700305405222967122	CMakeFiles/Src.dir/Transaction.cpp.o	6cf79f66905a3944
+3	706	1700306133542480112	CMakeFiles/Src.dir/Transaction.cpp.o	6cf79f66905a3944
+5	691	1700309170261997746	CMakeFiles/Src.dir/Transaction.cpp.o	6cf79f66905a3944
