@@ -8,6 +8,7 @@ private:
 public:
 	// Card
 	Card();
+	int getCardNum();
 	virtual ~Card();
 	void getCardNum();
 };

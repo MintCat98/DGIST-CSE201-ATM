@@ -7,7 +7,7 @@ Account::Account() {
     primaryBank = nullptr;
     ownedBy = nullptr;
     balance = 0;
-    accountHistory= new Transaction() // I'm not sure
+    accountHistory = new Transaction(); // I'm not sure
     cout << "[Const-A] A new account is created.\n";
 }
 
