@@ -16,12 +16,6 @@ Customer::~Customer() {
 	cout << "[Dest-C] User " << this->customerName << "is deleted.\n";
 }
 void Customer::getName() { cout << this->customerName; }
-void Customer::newAccount() {
-	
-}
-void Customer::deleteAccount() {
-
-}
 void Customer::getAccountList() {
 	// [Accounts owned by Name]: (Bank1,11111111) (Bank2,22222222)
 	// If empty list => [Accounts owned by Name]: 
@@ -37,11 +31,21 @@ void Customer::getAccountList() {
 	}
 	cout << "\n";
 }
-void Customer::newCard() {
-
+void Customer::newCard(Card* newCard) {
+	for (int i = 0; i < 100; i++) {
+		if (cardList[i] == nullptr) {
+			cardList[i] = newCard;
+			break;
+		}
+	}
 }
-void Customer::deleteCard() {
-
+void Customer::deleteCard(Card* targetCard) {
+	for (int i = 0; i < 100; i++) {
+		if (cardList[i] == targetCard) {
+			cardList[i] = nullptr;
+			break;
+		}
+	}
 }
 void Customer::getCardList() {
 	// Same with getAccountList() method

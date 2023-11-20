@@ -17,11 +17,9 @@ public:
 	~Customer();
 	void getName();
 	// Account
-	void newAccount();
-	void deleteAccount();
 	void getAccountList();
 	// Card
-	void newCard();
-	void deleteCard();
+	void newCard(Card* newCard);
+	void deleteCard(Card* targetCard);
 	void getCardList();
 };
