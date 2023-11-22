@@ -23,8 +23,8 @@ public:
 	~ATM();
 	void sessionLoop(); // 세션에서의 거래 내용 따로 리스트로 관리하다 종료 시 출력
 	int getSerialNum();
-	void selectLanguage();
 	int getCashAmount();
+	void selectLanguage();
 	void setCashAmount(int CashAmount);
 	// User Validation
 	bool isCardAvailable();
