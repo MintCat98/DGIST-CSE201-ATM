@@ -45,9 +45,3 @@ public:
 	void printATMStatus();
 	void printHistory();
 };
-int ATM::transNum = 0;
-
-
-void ATM::settranslist(int num, string history) {
-	this->transactionlist[num] = history;
-}
