@@ -4,9 +4,6 @@ Customer::Customer(string name) {
 	// Set name
 	this->customerName = name;
 	// Lists initialized
-	for (int i = 0; i < 10; i++) {
-		bankList[i] = nullptr;
-	}
 	for (int i = 0; i < 100; i++) {
 		cardList[i] = nullptr;
 	}

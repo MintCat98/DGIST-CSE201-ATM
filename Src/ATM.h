@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include "Bank.h"
 #include "Transaction.h"
 
@@ -10,16 +11,16 @@ class ATM {
 private:
 	int serialNum;
 	Bank* ownedBy;
-	Bank* bankList[10];
+	vector<Bank*> bankList;
 	bool singleBank;
 	bool biLanguage;
-	int cashAmount;
-	Transaction* transHistory; // dynamic allocation
+	map<int, int> cashAmount; // sort: amount
+	vector<Transaction*> transHistory;
 	static int transNum;
-	string transactionlist[100] = {};
+	/*string transactionlist[100] = {}; ???*/
 public:
 	// ATM
-	ATM();
+	ATM(Bank* primary, int sNum, bool single, bool lang, map<int,int> cash);
 	~ATM();
 	void sessionLoop(); // 세션에서의 거래 내용 따로 리스트로 관리하다 종료 시 출력
 	int getSerialNum();
