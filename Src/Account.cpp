@@ -3,6 +3,7 @@
 using namespace std;
 
 Account::Account() {
+    //초기화 다시 해보기
     accountNum = 0;
     primaryBank = nullptr;
     ownedBy = nullptr;
@@ -10,6 +11,7 @@ Account::Account() {
     accountHistory = new Transaction(); // I'm not sure
     cout << "[Const-A] A new account is created.\n";
 }
+
 
 Account::~Account() {
     delete accountHistory;
@@ -40,6 +42,8 @@ int Account::getBalance() const {
     return balance;
 }
 
+
+//isPrimary
 void Account::addTransaction(Transaction* transaction) {
 
 }
