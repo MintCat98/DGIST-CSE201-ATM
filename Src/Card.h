@@ -10,5 +10,5 @@ public:
 	Card();
 	int getCardNum();
 	virtual ~Card();
-	void getCardNum();
+	int getCardNum();
 };
