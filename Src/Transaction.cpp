@@ -27,7 +27,6 @@ void Transaction::deposit(ATM* serialNumber, Card* cardNumber) {
 	}
 	else {
 		cout << " Please put 1000 won. Your card is non-primary." << endl;
-
 	}
 	if (cashorcheck == "Cash" || cashorcheck == "cash") {
 		this->addcash(serialNumber, cardNumber);
