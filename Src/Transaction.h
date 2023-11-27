@@ -2,6 +2,7 @@
 
 #include "ATM.h"
 #include "Card.h"
+#include "Feeinitialize.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -18,13 +19,14 @@ private:
 	string transType;
 	int transAmount;
 public:
-	Transaction(ATM* serialNumber,Card* cardNumber, string type );
+	Transaction(ATM* serialNumber,Card* cardNumber, string type, Fee* fee);
+	Transaction(ATM* serialNumber, Account* accountNumberTo, string type, Fee* fee);
+	Transaction(ATM* serialNumber, Account* accountNumberFrom, Account* accountNumberTo, string type, Fee* fee);
 	virtual ~Transaction();
 	// Actions
-	void deposit(ATM* serialNumber,Card* cardNumber);
-	void withdrawal(ATM* serialNumber,Card* cardNumber);
-	void cashtransfer(ATM* serialNumber, Account* accountNumberTo);
-	void transfer(ATM* serialNumber, Account* accountNumberFrom, Account* accountNumberTo);
-	void addcash(ATM* serialNumber, Card* cardNumber);
-	void addcheck(ATM* serialNumber, Card* cardNumber);
+	void deposit(ATM* serialNumber,Card* cardNumber, Fee* fee);
+	void withdrawal(ATM* serialNumber,Card* cardNumber, Fee* fee);
+	void addcash(ATM* serialNumber, Card* cardNumber, Fee* fee);
+	void addcheck(ATM* serialNumber, Card* cardNumber, Fee* fee);
 };
+
