@@ -5,7 +5,6 @@ using namespace std;
 
 
 
-// Constructor
 Bank::Bank() {
     for (int i = 0; i < 100; i++) {
         atmList[i] = nullptr;
@@ -14,12 +13,12 @@ Bank::Bank() {
         customerList[i] = nullptr;
     }
     isPrimaryBank = false;
-    cout << "[Const-B] Bank " << bankName << " is created." << endl;
+    cout << "[Const-B]" << bankName << " Bank is created." << endl;
 }
 
-// Destructor
+
 Bank::~Bank() {
-    cout << "[Dest-B] Bank " << this->bankName << " is deleted.\n";
+    cout << "[Dest-B] Bank " << this->bankName << " Bank is deleted." << endl;
 }
 
 void Bank::getName() {
