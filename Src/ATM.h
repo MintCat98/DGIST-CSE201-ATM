@@ -37,9 +37,7 @@ public:
 	void transaction();
 	int decideFees();
 	bool isSufficient();
-	void updateCashAmmount();
-	void setTransNum(int transNumber);
-	int getTransNum();
+	void updateCashAmmount(bool isDeposit);
 	void settranslist(int num, string history);
 
 	// Admin

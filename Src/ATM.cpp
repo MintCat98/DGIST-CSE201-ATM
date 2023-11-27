@@ -92,7 +92,7 @@ bool ATM::selectLanguage() {
 }
 int ATM::getCashTotal() {
 	// Ignore check papers
-	int sum;
+	int sum = 0;
 	for (auto iter = this->cashAmount.begin(); iter != this->cashAmount.end(); iter++) {
 		sum += (iter->first) * (iter->second);
 	}
@@ -116,13 +116,7 @@ int ATM::decideFees() {
 bool ATM::isSufficient() {
 
 }
-void ATM::updateCashAmmount() {
-
-}
-void ATM::setTransNum(int transNumber) {
-
-}
-int ATM::getTransNum() {
+void ATM::updateCashAmmount(bool isDeposit) {
 
 }
 /*
