@@ -70,7 +70,7 @@ void ATM::sessionLoop() {
 	// Admin
 }
 int ATM::getSerialNum() { return this->serialNum; }
-bool ATM::selectLanguage() {
+void ATM::selectLanguage() {
 	string lang;
 	// Loop until we get valid inputs.
 	while (lang == "KR" || lang == "kr" || lang == "EN" || lang == "en") {
@@ -119,10 +119,6 @@ bool ATM::isSufficient() {
 void ATM::updateCashAmmount(bool isDeposit) {
 
 }
-/*
-void ATM::settranslist(int num, string history) {
-	this->transactionlist[num] = history;
-} ???*/
 void ATM::printATMStatus() {
 
 }

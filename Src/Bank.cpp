@@ -5,15 +5,17 @@ using namespace std;
 
 
 
-Bank::Bank() {
+Bank::Bank(string name) {
+    this->bankName = name;
     for (int i = 0; i < 100; i++) {
         atmList[i] = nullptr;
     }
     for (int i = 0; i < 1000; i++) {
         customerList[i] = nullptr;
     }
+
     isPrimaryBank = false;
-    cout << "[Const-B]" << bankName << " Bank is created." << endl;
+    cout << "[Const-B]" << this->bankName << " Bank is created." << endl;
 }
 
 
@@ -22,7 +24,7 @@ Bank::~Bank() {
 }
 
 void Bank::getName() {
-    cout << bankName << endl;
+    cout << this->bankName << endl;
 }
 
 void Bank::newATM(ATM* newATM) {

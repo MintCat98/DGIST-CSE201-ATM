@@ -19,7 +19,7 @@ private:
 	
 public:
 	// Bank
-	Bank();
+	Bank(string name);
 	~Bank();
 	void getName();
 	// ATM

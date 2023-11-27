@@ -25,7 +25,7 @@ int main() {
 	cout << "[Init] Please init bank instances.\n";
 	cout << "How many: "; cin >> numOfBank; cout << "\n";
 	for (int i = 0; i < numOfBank; i++) {
-		// Instanciate Banks!
+        // Instanciate Banks!
 	}
 	// ATM
 	int numOfATM;
@@ -34,7 +34,7 @@ int main() {
 	for (int i = 0; i < numOfATM; i++) {
 		// Instanciate ATMs!
 	}
-	// Account and Card
+	// Card
 	int numOfCards;
 	cout << "[Init] Please init Account/Card instances.\n";
 	cout << "How many: "; cin >> numOfCards; cout << "\n";
