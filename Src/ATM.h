@@ -3,6 +3,7 @@
 #include <map>
 #include "Bank.h"
 #include "Transaction.h"
+#include <cstdio>
 
 class Bank;
 class Transaction;
@@ -50,8 +51,6 @@ public:
     void deleteFile();
 
 
-
-
     void viewTransactionHistory() {
         string line;
         ifstream historyFile("transaction_history.txt");
@@ -69,7 +68,7 @@ public:
         int choice;
         while (choice != 2) {
             // View Options
-            cout << "============[Admin Menu]==============\n";
+            cout << "\n==========[Admin Menu]===========\n";
             cout << "Please select an option as an integer.\n";
             cout << "      1) View Transaction History\n";
             cout << "      2) Exit\n";

@@ -12,7 +12,7 @@ int Card::getCardNum() {
 */
 
 Card::~Card() {
-    cout << "[Dest - C] A card is deleted" << endl;
+    cout << "[Dest-C] A card is deleted" << endl;
 
 }
 

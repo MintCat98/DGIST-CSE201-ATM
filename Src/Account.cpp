@@ -23,7 +23,7 @@ string Account::getOwner() const {
 }
 
 int Account::getAccountNum() const {
-    return this->accountNum;
+    return this->accountNum_;
 }
 
 void Account::setbalance(int balance) {

@@ -13,19 +13,19 @@ Fee::Fee(string fee) {
     cout << "Set withdrawal fee for a primary bank" << endl;
     cin >> wfpb;
     wdFeePrim = wfpb;
-    cout << " Set withdrawal fee for non-primary banks" << endl;
+    cout << "Set withdrawal fee for non-primary banks" << endl;
     cin >> wfnpb;
     wdFeeNonp = wfnpb;
-    cout << " Set Account Transfer fee between primary banks" << endl;
+    cout << "Set Account Transfer fee between primary banks" << endl;
     cin >> atfbpb;
     atFeeBetPrim = atfbpb;
-    cout << " Set Account Transfer fee between primary and non-primary banks. " << endl;
+    cout << "Set Account Transfer fee between primary and non-primary banks. " << endl;
     cin >> atfbpnpb;
     atFeeBetPNonp = atfbpnpb;
-    cout << " Set Account Transfer fee between non-primary banks." << endl;
+    cout << "Set Account Transfer fee between non-primary banks." << endl;
     cin >> atfbnpb;
     atFeeBetNonp = atfbnpb;
-    cout << " Set Cash Transfer fee to any bank." << endl;
+    cout << "Set Cash Transfer fee to any bank." << endl;
     cin >> ctfab;
     ctFeeAny = ctfab;
 }

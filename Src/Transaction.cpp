@@ -1,10 +1,10 @@
 #include "Transaction.h"
-
+#include <cstdio>
 Transaction::Transaction(ATM* serialNumber, Card* cardNumber, string type, Fee* fee) {
 
     // Transaction 공통사항
 
-    this->cardNum = cardNumber->getCardNum(); // Transaction의 cardnum을 지정
+    this->cardNum = cardNumber->getAccountNum(); // Transaction의 cardnum을 지정
     this->transType = type;					  // Transtype을 지정
     this->transactionID = (100 * serialNumber->getSerialNum()) + serialNumber->getTransNum();
     // 임의로 거래 id를 ATM의 시리얼 넘버에 100을 곱한 후, TransNum을 더해준다.
@@ -19,6 +19,9 @@ Transaction::Transaction(ATM* serialNumber, Card* cardNumber, string type, Fee* 
     }
     else if (type == "withdrawal") {
         this->withdrawal(serialNumber, cardNumber, fee); // withdrawal이면 withdrawal 실행
+    }
+    else if (type == "cashtransfer") {
+        this->cashtransfer(serialNumber, cardNumber, fee);
     }
 }
 
@@ -56,12 +59,12 @@ void Transaction::addcash(ATM* serialNumber, Card* cardNumber, Fee* fee) {
     if (cardNumber->getPrimary(serialNumber) == true) {
         // primary가 맞을 때, 정해놓았던 fee를 불러온다.
         feemoney = fee->getdpFeePrim();
-        cout << " The fee is " << feemoney << "won.Your card is primary." << endl;
+        cout << " The fee is " << feemoney << " won.Your card is primary." << endl;
     }
     else {
         // 아닐 때, fee를 불러온다.
         feemoney = fee->getdpFeeNonp();
-        cout << " The fee is " << feemoney << "won.Your card is non - primary." << endl;
+        cout << " The fee is " << feemoney << " won.Your card is non - primary." << endl;
     }
 
 
@@ -72,7 +75,7 @@ void Transaction::addcash(ATM* serialNumber, Card* cardNumber, Fee* fee) {
     }
     else {
 
-        cout << " Successfully deposited " << balanceadd << "on card number" << cardNumber->getCardNum() << endl;
+        cout << " Successfully deposited " << balanceadd << " on card number" << cardNumber->getAccountNum() << endl;
         // card의 account 부분의 balance를 교체한다. 이는 기존 잔액에서 추가 잔액을 더하고, 수수료를 뺀 값이다.
         cardNumber->setbalance(cardNumber->getbalance() + balanceadd - feemoney);
 
@@ -88,12 +91,12 @@ void Transaction::addcash(ATM* serialNumber, Card* cardNumber, Fee* fee) {
         // transaction_history.txt에 점차 추가함.
         ofstream history("transaction_history.txt");
         if (history.is_open()) {
-            history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getCardNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
+            history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
         }
         history.close();
         ofstream receipt("receipt.txt");
         if (receipt.is_open()) {
-            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getCardNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
+            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
         }
         receipt.close();
     }
@@ -119,26 +122,26 @@ void Transaction::addcheck(ATM* serialNumber, Card* cardNumber, Fee* fee) {
         if (cardNumber->getPrimary(serialNumber) == true) {
             // primary가 맞을 때, 정해놓았던 fee를 불러온다.
             feemoney = fee->getdpFeePrim();
-            cout << " The fee is " << feemoney << "won.Your card is primary." << endl;
+            cout << " The fee is " << feemoney << " won.Your card is primary." << endl;
         }
         else {
             // 아닐 때, fee를 불러온다.
             feemoney = fee->getdpFeeNonp();
-            cout << " The fee is " << feemoney << "won.Your card is non - primary." << endl;
+            cout << " The fee is " << feemoney << " won.Your card is non - primary." << endl;
         }
 
 
-        cout << " Successfully deposited " << balanceadd << "on card number" << cardNumber->getCardNum() << endl;
+        cout << " Successfully deposited " << balanceadd << " on card number" << cardNumber->getAccountNum() << endl;
         cardNumber->setbalance(cardNumber->getbalance() + balanceadd - feemoney);
         ofstream history("transaction_history.txt");
         if (history.is_open()) {
-            history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getCardNum() << " Transaction Type : " << this->transType << ", check" << " Amount : " << balanceadd << "\n";
+            history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", check" << " Amount : " << balanceadd << "\n";
         }
         history.close();
 
         ofstream receipt("receipt.txt");
         if (receipt.is_open()) {
-            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getCardNum() << " Transaction Type : " << this->transType << ", check" << " Amount : " << balanceadd << "\n";
+            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", check" << " Amount : " << balanceadd << "\n";
         }
         receipt.close();
     }
@@ -224,15 +227,18 @@ void Transaction::withdrawal(ATM* serialNumber, Card* cardNumber, Fee* fee) {
             cardNumber->setbalance(cardNumber->getbalance() - withdrawamount - feemoney);
 
 
+            cout << " Successfully withdrawed " << withdrawamount << " on card number" << cardNumber->getAccountNum() << endl;
+
+
             ofstream history("transaction_history.txt");
             if (history.is_open()) {
-                history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getCardNum() << " Transaction Type : " << this->transType << " Amount : " << withdrawamount << "\n";
+                history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << " Amount : " << withdrawamount << "\n";
             }
             history.close();
 
             ofstream receipt("receipt.txt");
             if (receipt.is_open()) {
-                receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getCardNum() << " Transaction Type : " << this->transType << " Amount : " << withdrawamount << "\n";
+                receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << " Amount : " << withdrawamount << "\n";
             }
             receipt.close();
         }
@@ -242,19 +248,8 @@ void Transaction::withdrawal(ATM* serialNumber, Card* cardNumber, Fee* fee) {
 
 }
 
-Transaction::Transaction(ATM* serialNumber, Account* accountNumberTo, string type, Fee* fee) {
 
-    // Transaction 공통사항
-
-    this->cardNum = accountNumberTo->getAccountNum(); // Transaction의 cardnum을 지정
-    this->transType = type;					  // Transtype을 지정
-    this->transactionID = (100 * serialNumber->getSerialNum()) + serialNumber->getTransNum();
-    // 임의로 거래 id를 ATM의 시리얼 넘버에 100을 곱한 후, TransNum을 더해준다.
-    serialNumber->setTransNum(serialNumber->getTransNum() + 1);
-    // 거래 번호를 1 더해서 저장해 둔다.
-    cout << "[Constructor]New transaction Created: (" << this->transactionID << ")";
-
-    // cash transfer 입니다.
+void Transaction::cashtransfer(ATM* serialNumber, Card* cardNumber, Fee* fee) {
     cout << "Please tell me how many bills you would like to put in each unit." << endl;
     cout << "KRW 1,000, KRW 5,000,KRW 10,000, KRW 50,000" << endl;
     int c, oc, m, om;
@@ -268,8 +263,8 @@ Transaction::Transaction(ATM* serialNumber, Account* accountNumberTo, string typ
         cout << " Error amount " << endl;
     }
     else {
-        cout << " Successfully transfered " << balanceadd << "on account" << accountNumberTo->getAccountNum() << endl;
-        accountNumberTo->setbalance(accountNumberTo->getbalance() + balanceadd - fee->getctFeeAny());
+        cout << " Successfully transfered " << balanceadd << " on account" << cardNumber->getAccountNum() << endl;
+        cardNumber->setbalance(cardNumber->getbalance() + balanceadd - fee->getctFeeAny());
 
         serialNumber->set1000won(serialNumber->get1000won() + c);
         serialNumber->set5000won(serialNumber->get5000won() + oc);
@@ -279,18 +274,20 @@ Transaction::Transaction(ATM* serialNumber, Account* accountNumberTo, string typ
 
         ofstream history("transaction_history.txt");
         if (history.is_open()) {
-            history << "Transaction ID : " << this->transactionID << " Card Number : " << accountNumberTo->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
+            history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
         }
         history.close();
         ofstream receipt("receipt.txt");
         if (receipt.is_open()) {
-            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << accountNumberTo->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
+            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
         }
         receipt.close();
     }
 }
 
-Transaction::Transaction(ATM* serialNumber, Card* accountNumberFrom, Account* accountNumberTo, string type, Fee* fee) {
+
+
+Transaction::Transaction(ATM* serialNumber, Card* accountNumberFrom, Card* accountNumberTo, string type, Fee* fee) {
 
     // Transaction 공통사항
     this->cardNum = accountNumberFrom->getAccountNum();
@@ -312,14 +309,16 @@ Transaction::Transaction(ATM* serialNumber, Card* accountNumberFrom, Account* ac
             if (accountNumberFrom->getbalance() >= money) {
                 accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
                 accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
+
+                cout << " Successfully transfered " << money << " from account " << accountNumberFrom->getAccountNum() << " to "  << accountNumberTo->getAccountNum() << endl;
                 ofstream history("transaction_history.txt");
                 if (history.is_open()) {
-                    history << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+                    history << "Transaction ID : " << this->transactionID << "Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
                     history.close();
                 }
                 ofstream receipt("receipt.txt");
                 if (receipt.is_open()) {
-                    receipt << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+                    receipt << "Transaction ID : " << this->transactionID << "Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
                     receipt.close();
                 }
             }
@@ -337,14 +336,15 @@ Transaction::Transaction(ATM* serialNumber, Card* accountNumberFrom, Account* ac
                 if (accountNumberFrom->getbalance() >= money) {
                     accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
                     accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
+                    cout << " Successfully transfered " << money << " from account " << accountNumberFrom->getAccountNum() << " to "  << accountNumberTo->getAccountNum() << endl;
                     ofstream history("transaction_history.txt");
                     if (history.is_open()) {
-                        history << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+                        history << "Transaction ID : " << this->transactionID << " Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
                         history.close();
                     }
                     ofstream receipt("receipt.txt");
                     if (receipt.is_open()) {
-                        receipt << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+                        receipt << "Transaction ID : " << this->transactionID << " Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
                     }
                     receipt.close();
                 }
@@ -363,14 +363,15 @@ Transaction::Transaction(ATM* serialNumber, Card* accountNumberFrom, Account* ac
                     if (accountNumberFrom->getbalance() >= money) {
                         accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
                         accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
+                        cout << " Successfully transfered " << money << " from account " << accountNumberFrom->getAccountNum() << " to "  << accountNumberTo->getAccountNum() << endl;
                         ofstream history("transaction_history.txt");
                         if (history.is_open()) {
-                            history << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+                            history << "Transaction ID : " << this->transactionID << " Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount " << money;
                             history.close();
                         }
                         ofstream receipt("receipt.txt");
                         if (receipt.is_open()) {
-                            receipt << "Transaction ID : " << this->transactionID << "Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
+                            receipt << "Transaction ID : " << this->transactionID << " Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount " << money;
                         }
                         receipt.close();
                     }

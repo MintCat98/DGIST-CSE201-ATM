@@ -1,5 +1,5 @@
 #include "ATM.h"
-
+#include <cstdio>
 int ATM::atmIDs = 0;
 int ATM::transNum = 0;
 
@@ -30,20 +30,22 @@ int ATM::getCashTotal() {
 void ATM::selectLanguage() {
     string lang;
     // Loop until we get valid inputs.
-    while (lang == "KR" || lang == "kr" || lang == "EN" || lang == "en") {
+    while (true) {
         // Select
         cout << "Please select language(KR/EN): "; cin >> lang;
         // Check
         if (lang == "KR" || lang == "kr") {
             cout << "Language set as Korean.\n";
             this->isKorean = true;
+            break;
         }
         else if (lang == "EN" || lang == "en") {
             cout << "Language set as English.\n";
             this->isKorean = false;
+            break;
         }
         else {
-            cout << "[Error] Please insert valid inputs!\n";
+            cout << "[ValueError] Invalid inputs! Enter 'KR' or 'EN'!\n";
         }
     }
 }

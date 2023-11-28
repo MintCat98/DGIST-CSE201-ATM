@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cstdio>
 using namespace std;
 
 class ATM;
@@ -23,9 +24,7 @@ private:
 public:
     Transaction(ATM* serialNumber, Card* cardNumber, string type, Fee* fee);
 
-    Transaction(ATM* serialNumber, Account* accountNumberTo, string type, Fee* fee);
-
-    Transaction(ATM* serialNumber, Card* accountNumberFrom, Account* accountNumberTo, string type, Fee* fee);
+    Transaction(ATM* serialNumber, Card* accountNumberFrom, Card* accountNumberTo, string type, Fee* fee);
 
     virtual ~Transaction();
 
@@ -37,6 +36,8 @@ public:
     void addcash(ATM* serialNumber, Card* cardNumber, Fee* fee);
 
     void addcheck(ATM* serialNumber, Card* cardNumber, Fee* fee);
+
+    void cashtransfer(ATM* serialNumber, Card* cardNumber, Fee* fee);
 
 
 };
