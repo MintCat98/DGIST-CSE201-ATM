@@ -4,158 +4,380 @@
 #include <map>
 #include "Bank.h"
 #include "ATM.h"
-#include "Customer.h"
-#include "Card.h"
+#include "Cardaccount.h"
 #include "Transaction.h"
-
+#include <fstream>
 using namespace std;
 
 int main() {
-	/*
-	* [Init Section]
-	*/
-	cout << "====================================================\n";
-	cout << "|  DGIST CSE201 Term-Project / ATM Implementation  |\n";
-	cout << "====================================================\n";
-	cout << "\n";
-	// Containers
-	map<string, Bank*> banks;   // Name: Bank
-	map<int, ATM*> ATMs;        // SN: ATM
-	map<string, Card*> cards;   // No.: Card
-	// Bank
-	int numOfBank;
-	cout << "[Init] Please init bank instances.\n";
-	cout << "How many: "; cin >> numOfBank; cout << "\n";
-	for (int i = 0; i < numOfBank; i++) {
-        // Instanciate Banks!
-	}
-	// ATM
-	int numOfATM;
-	cout << "[Init] Please init ATM instances.\n";
-	cout << "How many: "; cin >> numOfATM; cout << "\n";
-	for (int i = 0; i < numOfATM; i++) {
-        // Init Inputs
-        cout << "[ATM Init.] Please insert below.";
-        string bank; int sn; string single; string bilang; map<int, int> cash;
-        // Input check 구현 필요!!!!!!!!!!
-        cout << "Primary Bank      : "; cin >> bank; cout << "\n";  // 존재 여부 확인
-        cout << "Serial Number     : "; cin >> sn; cout << "\n";    // 중복 확인
-        cout << "Type(S/NS)        : ";	cin >> single; cout << "\n";// 입력 확인
-        cout << "Bilingual(T/F)    : ";	cin >> bilang; cout << "\n";// 입력 확인
-        cout << "Amount of 1000won : ";	cin >> cash[1000]; cout << "\n";// 입력 확인
-        cout << "Amount of 5000won : ";	cin >> cash[5000]; cout << "\n";// 입력 확인
-        cout << "Amount of 10000won: ";	cin >> cash[10000]; cout << "\n";// 입력 확인
-        cout << "Amount of 50000won: ";	cin >> cash[50000]; cout << "\n";// 입력 확인
-        // Instantiation
-        // 이거 확인 필요!!!!!!!!
-        ATM atm = ATM(banks[bank], sn, true, true, cash);
-        ATMs[sn] = &atm;
-	}
-	// Card
-	int numOfCards;
-	cout << "[Init] Please init Account/Card instances.\n";
-	cout << "How many: "; cin >> numOfCards; cout << "\n";
-	for (int i = 0; i < numOfCards; i++) {
-		// Instanciate Cards!
-	}
+    /*
+    * [Init Section]
+    */
+    cout << "====================================================\n";
+    cout << "|  DGIST CSE201 Term-Project / ATM Implementation  |\n";
+    cout << "====================================================\n";
 
-	/*
-	* [Loop Sessions]
-	* (Infinite loop until a user select End option.)
-	* 0. Welcome message
-	* 1. Insert a card
-	*	 (Need to check whether it is primary.)
-	* 2. Select language
-		 (If an ATM is bilingual one.)
-	* 3. View options
-	* 4. If it ends, view a summary
-	*/
-    int selected{0};
-    while (selected != 2) {
-        // Base Session
-        cout << "======= Please select one =======\n";
-        cout << "  1. Select an ATM\n";
-        cout << "  2. Exit the Whole Sessions\n";
-        cout << "=================================\n";
-        cout << " - Select: "; cin >> selected; cout << "\n";
-        switch (selected) {
-            case 2:
+    // Containers
+    map<string, Bank *> banks;       // Name: Bank
+    map<int, ATM *> ATMs;            // SN: ATM
+    map<int, Card *> cardMap;        // No: Card
+    map<int, Account *> accountMap;  // No: Account
+
+    // Bank
+    int numOfBank;
+    cout << "\n[Init] Please init bank instances.\n";
+    cout << " - Enter the number of Banks: ";
+    cin >> numOfBank;
+    for (int i = 0; i < numOfBank; i++) {
+        // Instanciate Banks!
+        string bankname;
+        cout << " - Enter the name of Bank: ";
+        cin >> bankname;
+        banks[bankname] = new Bank(bankname);
+    }
+
+    // ATM
+    int numOfATM;
+    cout << "\n[Init] Please init ATM instances.\n";
+    cout << " - Enter the number of ATMs: ";
+    cin >> numOfATM;
+    for (int i = 0; i < numOfATM; i++) {
+        // Init Inputs
+        cout << "\n[ATM Init.] Please insert below.\n";
+        string bank;
+        int sn;
+        string single;
+        bool bilang = false;
+        map<int, int> cash;
+        bool validBank = false;
+        do {
+            cout << "Primary Bank      : ";
+            cin >> bank;
+            if (banks.find(bank) != banks.end()) {
+                validBank = true;
+            } else {
+                cout << "[ValueError] Bank not found! Enter a valid bank name!\n";
+            }
+        } while (!validBank);
+
+        bool duplicateSerial = false;
+        do {
+            cout << "Serial Number     : ";
+            cin >> sn;
+            // Check if the serial number already exists in the ATMs map
+            if (ATMs.find(sn) != ATMs.end()) {
+                cout << "[ValueError] Serial number already exists! Enter a valid number!\n";
+                duplicateSerial = true;
+            } else {
+                duplicateSerial = false;
+            }
+        } while (duplicateSerial);
+        bool realsingle;
+        while (true) {
+            cout << "Type(S/M)         : "; cin >> single;
+            if (single == "s" || single == "S") {
+                realsingle = true;
                 break;
-            case 1:
+            } else if (single == "m" || single == "M") {
+                realsingle = false;
+                break;
+            } else {
+                cout << "[ValueError] Invalid input! Enter 'S' or 'M'!\n";
+            }
+        }
+        string tf;
+        cout << "Bilingual(T/F)    : ";
+        cin >> tf;
+        if (tf == "T" || tf == "t") {
+            bilang = true;
+        } else if (tf == "F" || tf == "f") {
+            bilang = false;
+        } else {
+            cout << "[ValueError] Invalid input! Enter 'T' or 'F'!\n";
+        }
+        cout << "Amount of 1000won : ";
+        cin >> cash[1000];
+        cout << "Amount of 5000won : ";
+        cin >> cash[5000];
+        cout << "Amount of 10000won: ";
+        cin >> cash[10000];
+        cout << "Amount of 50000won: ";
+        cin >> cash[50000];
+        cash[12345] = cash[1000] * 1000 + cash[5000] * 5000 + cash[10000] * 10000 + cash[50000] * 50000;
+        ATMs[sn] = new ATM(banks[bank], sn, realsingle, bilang, cash);
+    }
+
+    // Card
+    // ADMIN's Card
+    int admin = 000000;
+
+    // Customers' Cards
+    int numOfAccounts;
+    cout << "\n[Init] Please init Account/Card instances.\n";
+    cout << " - Enter the number of Account: ";
+    cin >> numOfAccounts;
+    for (int i = 0; i < numOfAccounts; i++) {
+        cout << "\n[Account/Card Init.] Please insert below.\n";
+        string bank, username;
+        int accountnum;
+        int funds;
+        string issue;
+        string password;
+        bool validBank = false;
+        do {
+            cout << "Bank Name          : "; cin >> bank;
+            if (banks.find(bank) != banks.end()) {
+                validBank = true;
+            } else {
+                cout << "[ValueError] Bank not found! Enter a valid bank name!\n";
+            }
+        } while (!validBank);
+        cout << "User Name          : "; cin >> username;
+        bool duplicateAccount = false;
+        do {
+            cout << "Account/Card Number: "; cin >> accountnum;
+            if (accountMap.find(accountnum) != accountMap.end()) {
+                cout << "[ValueError] Account number already exists! Enter a valid number!\n";
+                duplicateAccount = true;
+            } else {
+                duplicateAccount = false;
+            }
+        } while (duplicateAccount);
+        cout << "Initial Balance    : "; cin >> funds;
+        while (true) {
+            cout << "Card Issue(Y/N)    : "; cin >> issue;
+            if (issue == "Y" || issue == "y") {
+                cout << "Password           :  "; cin >> password;
+                accountMap[accountnum] = new Account(bank, username, accountnum, funds);
+                cardMap[accountnum] = new Card(bank, username, accountnum, funds, password);
+                break;
+            } else if (issue == "N" || issue == "n") {
+                accountMap[accountnum] = new Account(bank, username, accountnum, funds);
+                break;
+            } else {
+                cout << "[ValueError] Invalid input! Enter 'Y' or 'N'!\n";
+            }
+        }
+    }
+
+    // Fee
+    cout << "\n[Init] Please init Fee instances\n";
+    string feename = "fee";
+    Fee *fee = new Fee(feename);
+
+
+    /*
+    * [Loop Sessions]
+    */
+    int selected = 0;
+    while (selected != 4) {
+        // Base Session
+        cout << "\n======= Please select one =======\n";
+        cout << "  1. Select an ATM\n";
+        cout << "  2. Display ATM-Info.\n";
+        cout << "  3. Display Account-Info.\n";
+        cout << "  4. End the Base Session\n";
+        cout << "=================================\n";
+        cout << " - Select: "; cin >> selected;
+
+        switch (selected) {
+            default:
+                cout << "[ValueError] Enter a valid option among (1) ~ (4).!\n\n";
+            case 2: // ATM-Info.
+                cout << "\n[ATMs' Stats]\n";
+                for (auto atm = ATMs.begin(); atm != ATMs.end(); ++atm) {
+                    cout << "<List of ATMs>\n";
+                    cout << " - S/N : " << atm->second->getSerialNum() << "\n";
+                    cout << " - Cash: " << atm->second->getCashAmount() << "\n";
+                }
+            case 3: // Account-Info.
+                cout << "\n[Accounts' Stats]\n";
+                for (auto acc = accountMap.begin(); acc != accountMap.end(); ++acc) {
+                    cout << "<List of Accounts>\n";
+                    cout << " - Bank   : " << acc->second->getBankName() << "\n";
+                    cout << " - Owner  : " << acc->second->getOwner() << "\n";
+                    cout << " - Balance: " << acc->second->getbalance() << "\n";
+                }
+            case 4: // Exit
+                bool goBack;
+                while (true) {
+                    string yn;
+                    cout << "\n========== Exit Called ==========\n";
+                    cout << " Do you really want to end?\n";
+                    cout << "  (Y/N): ";
+                    cin >> yn;
+                    if (yn == "Y" || yn == "y") {
+                        cout << "\n Thanks for using!\n";
+                        cout << "=================================\n";
+                        goBack = false;
+                        break;
+                    } else if (yn == "N" || yn == "n") {
+                        cout << "\n Returning to the Base session.\n";
+                        cout << "=================================\n";
+                        goBack = true;
+                        break;
+                    } else {
+                        cout << "[ValueError] Invalid input! Enter 'Y' or 'N'!\n";
+                    }
+                }
+                if (goBack) {
+                    selected = 0;
+                } else {
+                    break;
+                }
+            case 1: // ATM Session
                 // Select an ATM
                 int sn;
-                ATM* currentATM;
+                ATM *currentATM;
                 while (true) {
-                    cout << "[ATM] Select an ATM w.Serial Numbers: "; cin >> sn; cout << "\n";
+                    cout << "[ATM] Select an ATM. Serial Numbers: ";
+                    cin >> sn;
                     auto find = ATMs.find(sn);
                     if (find != ATMs.end()) { // Exists
                         currentATM = ATMs[sn];
                         break;
-                    }
-                    else { // Error
-                        cout << "[Error] Insert a valid serial number!\n";
+                    } else { // Error
+                        cout << "[ValueError] Invalid serial number! Enter a valid serial number!\n";
                     }
                 }
                 // Insert a Card
                 int no;
-                Card* currentCard;
+                Card *currentCard;
                 while (true) {
-                    cout << "[Card] Insert a card to start: "; cin >> no; cout << "\n"
-                    auto find = cards.find(no); // 카드 인스턴스 안 만들어져서 오류
-                    if (find != cards.end()) { // Exists
-                        currentCard = cards[no];
+                    cout << "[Card] Insert a card to start: ";
+                    cin >> no;
+                    auto find = cardMap.find(no); // 카드 인스턴스 안 만들어져서 오류보이시이
+                    if (no == admin) {
+                        // Admin
+                        currentATM->adminMenu();
+                    } else if (find != cardMap.end()) { // Exists
+                        currentCard = cardMap[no];
                         break;
-                    }
-                    else { // Error
-                        cout << "[Error] Insert a valid card!\n";
+                    } else { // Error
+                        cout << "[ValueError] Invalid card! Insert a valid card!\n";
                     }
                 }
-                // Admin or Customer
-                // 카드나 어카운트 수정 필요
-                // Customer 기준
-                cout << "======================================================\n";
+/*
+                if {
+                    // Customer
+                    cout << "======================================================\n";
+*/
                 // Set Language
                 if (currentATM->isBilingual()) { // If bilingual
                     currentATM->selectLanguage();
-                }
-                else { // If unilingual
+                } else { // If unilingual
                     currentATM->setEN();
                 }
-                // Session Loop
+                // ATM Session Loop
                 cout << "======================================================\n";
-                int option; option = 0; // 알 수 없는 에러 때문에 이렇게 초기화 함
-                while (option != 5) {
+                while (selected != 6) {
                     // View Options
                     cout << "[Please select an option as an integer.]\n";
                     cout << " 1) Deposit\n";
                     cout << " 2) Withdrawal\n";
-                    cout << " 3) Transfer\n";
-                    cout << " 4) Print a Receipt\n";
-                    cout << " 5) Exit\n";
-                    cout << " - Select: "; cin >> selected; cout << "\n";
-                    switch (option) {
-                        case 1:
-                            // Deposit
-                        case 2:
-                            // Withdrawal
-                        case 3:
-                            // Transfer
-                        case 4:
-                            // Print Receipts
-                        case 5:
-                            cout << "(Note) Sessions in ATM " << currentATM->getSerialNum() << "ended.\n";
-                            break;
-                        default:
-                            cout << "[Error] Insert a valid option!\n\n";
+                    cout << " 3) Cash Transfer\n";
+                    cout << " 4) Account Transfer\n";
+                    cout << " 5) Print a Receipt\n";
+                    cout << " 6) Exit\n";
+                    cout << " - Select: ";
+                    cin >> selected;
+                    if (selected == 1) {
+                        //Deposit
+                        string type = "deposit";
+                        Transaction deposit(currentATM, currentCard, type, fee);
+                    } else if (selected == 2) {
+                        //Withdrawal
+                        string type = "withdrawal";
+                        Transaction deposit(currentATM, currentCard, type, fee);
+                    } else if (selected == 3) {
+                        // Cash Transfer
+                        int accountNum;
+                        Account *currentAccount;
+                        string type = "cashTransfer";
+                        while (true) {
+                            cout << "Which account do you want to Transfer?" << endl;
+                            cin >> accountNum;
+                            auto find = accountMap.find(accountNum);
+                            if (find != accountMap.end()) { // Exists
+                                currentAccount = accountMap[accountNum];
+                                Transaction cashtransfer(currentATM, currentAccount, type, fee);
+                                break;
+                            } else { // Error
+                                cout << "[ValueError] Invalid account number! Enter a valid account number!\n";
+                            }
+                        }
+                    } else if (selected == 4) {
+                        // Account Transfer
+                        int accountNum;
+                        Account *currentAccount;
+                        string type = "cashAccount";
+                        while (true) {
+                            cout << "Which account do you want to Transfer?" << endl;
+                            cin >> accountNum;
+                            auto find = accountMap.find(accountNum);
+                            if (find != accountMap.end()) { // Exists
+                                currentAccount = accountMap[accountNum];
+                                Transaction accounttransfer(currentATM, currentCard, currentAccount, type, fee);
+                                break;
+                            } else { // Error
+                                cout << "[ValueError] Invalid account number! Enter a valid account number!\n";
+                            }
+                        }
+                    } else if (selected == 5) {
+                        // Print a Receipt
+                        vector<string> data;
+                        ifstream file("receipt.txt");
+
+                        if (file.is_open()) {
+                            string line;
+                            while (getline(file, line)) {
+                                data.push_back(line);
+                            }
+                            cout << "Data read from file:\n";
+
+                            for (const auto &line: data) {
+                                cout << line << endl;
+                            }
+                        } else {
+                            cerr << "Unable to open file for reading.\n";
+                        }
+                    } else if (selected == 6) {
+                        // Exit
+                        currentATM->deleteFile();
+                        cout << " Exit  " << endl;
+                        break;
+                    } else {
+                        cout << "[ValueError] Enter a valid option among (1) ~ (6).!\n\n";
                     }
                 }
-            default:
-                cout << "[Error] Insert a valid option!\n\n";
         }
     }
 
 
-    // Normal User
+    /*
+    * [Deallocation]
+    */
+    // Delete Banks
+    for (auto& bank: banks) {
+        delete bank.second;
+    }
+    banks.clear();
+    // Delete ATMs
+    for (auto& atm: ATMs) {
+        delete atm.second;
+    }
+    ATMs.clear();
+    // Delete Accounts
+    for (auto& account: accountMap) {
+        delete account.second;
+    }
+    accountMap.clear();
+    // Delete Cards
+    for (auto& card: cardMap) {
+        delete card.second;
+    }
+    cardMap.clear();
 
-	return 0;
+    return 0;
 }
+

@@ -1,7 +1,7 @@
 #include "ATM.h"
 
 int ATM::atmIDs = 0;
-int ATM::transNums = 0;
+int ATM::transNum = 0;
 
 ATM::ATM(Bank* primary, int sNum, bool single, bool lang, map<int, int> cash) {
     ATM::atmIDs++;
@@ -11,12 +11,13 @@ ATM::ATM(Bank* primary, int sNum, bool single, bool lang, map<int, int> cash) {
     this->singleBank = single;
     this->biLanguage = lang;
     this->cashAmount = cash;
-	cout << "[Const-A] A new (ATM " << this->aID << ") is added.\n";
+    cout << "[Const-A] A new (ATM " << this->aID << ") is added.\n";
 }
 ATM::~ATM() {
-	cout << "[Dest-A] ATM No." << this->serialNum << "is deleted.\n";
+    cout << "[Dest-A] ATM No." << this->serialNum << "is deleted.\n";
 }
 int ATM::getSerialNum() { return this->serialNum; }
+/*
 int ATM::getCashTotal() {
     // Ignore check papers
     int sum = 0;
@@ -25,25 +26,26 @@ int ATM::getCashTotal() {
     }
     return sum;
 }
+*/
 void ATM::selectLanguage() {
-	string lang;
-	// Loop until we get valid inputs.
-	while (lang == "KR" || lang == "kr" || lang == "EN" || lang == "en") {
-		// Select
-		cout << "Please select language(KR/EN): "; cin >> lang; cout << "\n";
-		// Check
-		if (lang == "KR" || lang == "kr") {
-			cout << "Language set as Korean.\n";
-			this->isKorean = true;
-		}
-		else if (lang == "EN" || lang == "en") {
-			cout << "Language set as English.\n";
-			this->isKorean = false;
-		}
-		else {
-			cout << "[Error] Please insert valid inputs!\n";
-		}
-	}
+    string lang;
+    // Loop until we get valid inputs.
+    while (lang == "KR" || lang == "kr" || lang == "EN" || lang == "en") {
+        // Select
+        cout << "Please select language(KR/EN): "; cin >> lang;
+        // Check
+        if (lang == "KR" || lang == "kr") {
+            cout << "Language set as Korean.\n";
+            this->isKorean = true;
+        }
+        else if (lang == "EN" || lang == "en") {
+            cout << "Language set as English.\n";
+            this->isKorean = false;
+        }
+        else {
+            cout << "[Error] Please insert valid inputs!\n";
+        }
+    }
 }
 bool ATM::isBilingual() {
     return this->biLanguage;
@@ -51,30 +53,70 @@ bool ATM::isBilingual() {
 void ATM::setEN() {
     this->isKorean = false;
 }
-bool ATM::isCardAvailable() {
-
+bool ATM::getKR() {
+    return this->isKorean;
 }
-bool ATM::isAdmin() {
-
+int ATM::getTransNum() {
+    return this->transNum;
 }
-bool ATM::isCardPW() {
-
+void ATM::setTransNum(int transnum) {
+    this->transNum = transnum;
 }
-void ATM::transaction() {
 
+int ATM::get1000won() {
+    return cashAmount[1000];
 }
-int ATM::decideFees() {
 
+int ATM::get5000won() {
+    return cashAmount[5000];
 }
-bool ATM::isSufficient() {
 
+int ATM::get10000won() {
+    return cashAmount[10000];
 }
-void ATM::updateCashAmmount(bool isDeposit) {
 
+int ATM::get50000won() {
+    return cashAmount[50000];
 }
-void ATM::printATMStatus() {
 
+void ATM::set1000won(int bill) {
+    cashAmount[1000] = bill;
 }
-void ATM::printHistory() {
 
+void ATM::set5000won(int bill) {
+    cashAmount[5000] = bill;
 }
+
+void ATM::set10000won(int bill) {
+    cashAmount[10000] = bill;
+}
+
+void ATM::set50000won(int bill) {
+    cashAmount[50000] = bill;
+}
+
+int ATM::getCashAmount() {
+    return cashAmount[12345];
+}
+
+void ATM::setCashAmount(int cash) {
+    cashAmount[12345] = cash;
+}
+
+
+string ATM::getPrimaryBank() {
+    return ownedBy->getName();
+}
+
+void ATM::deleteFile() {
+    const char filename[] = "receipt.txt";
+    if (remove(filename) == 0) {
+        std::cout << "File '" << filename << "' deleted successfully.\n";
+    }
+    else {
+        std::perror("Error deleting file");
+    }
+}
+
+
+

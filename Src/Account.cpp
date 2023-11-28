@@ -1,57 +1,44 @@
-#include "Account.h"
+#include "Cardaccount.h"
 #include <iostream>
 using namespace std;
 
-Account::Account() {
-    //초기화 다시 해보기
-    accountNum = 0;
-    primaryBank = nullptr;
-    ownedBy = nullptr;
-    balance = 0;
-    accountHistory = new Transaction(); // I'm not sure
-    cout << "[Const-A] A new account is created.\n";
+Account::Account(string bankName, string userName, int accountNum, int funds) {
+    cout << "Account created" << endl;
+    this->bankName_ = bankName;
+    this->userName_ = userName;
+    this->accountNum_ = accountNum;
+    this->balance_ = funds;
 }
 
-
 Account::~Account() {
-    delete accountHistory;
-    cout << "[Dest-A] Account is deleted.\n";
+    cout << " Account is deleted.\n";
+}
+
+string Account::getBankName() const {
+    return this->bankName_;
+}
+
+string Account::getOwner() const {
+    return this->userName_;
 }
 
 int Account::getAccountNum() const {
-    cout << "Account Number: " << accountNum << "\n";
-    return accountNum;
+    return this->accountNum;
 }
 
-void Account::getBankName() const{
-    string bankName = "Not Assigned";
-    if (primaryBank != nullptr) {
-        bankName = primaryBank->getName();
+void Account::setbalance(int balance) {
+    this->balance_ = balance;
+}
+
+int Account::getbalance() const {
+    return this->balance_;
+}
+
+bool Account::getPrimary(ATM* atm) {
+    if (atm->getPrimaryBank() == this->bankName_) {
+        return true;
     }
-    cout << "Bank Name: " << bankName << "\n";
-}
-void Account::getOwner() const {
-    string userName = "Not Assigned";
-    if ( ownedBy != nullptr) {
-        userName = ownedBy->getName();
+    else {
+        return false;
     }
-    cout << "User Name: " << userName << "\n";
 }
-
-int Account::getBalance() const {
-    return balance;
-}
-
-
-//isPrimary
-void Account::addTransaction(Transaction* transaction) {
-
-}
-void Account::updateBalance() {
-
-}
-void Account::updateHistory() {
-
-}
-
-//

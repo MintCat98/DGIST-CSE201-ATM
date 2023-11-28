@@ -1,32 +1,32 @@
 #pragma once
 
 #include "ATM.h"
-#include "Card.h"
+#include "Cardaccount.h"
 #include <iostream>
 #include <string>
 #include <fstream>
-
+using namespace std;
 
 class Fee {
 private:
-	string feeName;
-	int dpFeeNonp;
-	int dpFeePrim;
-	int wdFeePrim;
-	int wdFeeNonp;
-	int atFeeBetPrim;
-	int atFeeBetPNonp;
-	int afFeeBetNonp;
-	int ctFeeAny;
+    string feename;
+    int dpFeeNonp;
+    int dpFeePrim;
+    int wdFeePrim;
+    int wdFeeNonp;
+    int atFeeBetPrim;
+    int atFeeBetPNonp;
+    int atFeeBetNonp;
+    int ctFeeAny;
 public:
-	Fee(string name);
-	int getdpFeeNonp();
-	int getdpFeePrim();
-	int getwdFeePrim();
-	int getwdFeeNonp();
-	int getatFeeBetPrim();
-	int getatFeeBetPNonp();
-	int getafFeeBetNonp();
-	int getctFeeAny();
+    Fee(string name);
+    int getdpFeeNonp();
+    int getdpFeePrim();
+    int getwdFeePrim();
+    int getwdFeeNonp();
+    int getatFeeBetPrim();
+    int getatFeeBetPNonp();
+    int getatFeeBetNonp();
+    int getctFeeAny();
 };
 

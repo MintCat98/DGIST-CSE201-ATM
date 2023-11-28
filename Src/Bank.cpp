@@ -14,7 +14,6 @@ Bank::Bank(string name) {
         customerList[i] = nullptr;
     }
 
-    isPrimaryBank = false;
     cout << "[Const-B]" << this->bankName << " Bank is created." << endl;
 }
 
@@ -23,8 +22,8 @@ Bank::~Bank() {
     cout << "[Dest-B] Bank " << this->bankName << " Bank is deleted." << endl;
 }
 
-void Bank::getName() {
-    cout << this->bankName << endl;
+string Bank::getName() {
+    return bankName;
 }
 
 void Bank::newATM(ATM* newATM) {
