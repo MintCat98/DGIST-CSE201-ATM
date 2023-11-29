@@ -120,5 +120,7 @@ void ATM::deleteFile() {
     }
 }
 
-
+bool ATM::isSingleBank() {
+    return singleBank;
+}
 

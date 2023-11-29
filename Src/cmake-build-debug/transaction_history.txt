@@ -1,1 +1,0 @@
-Transaction ID : 11100 Card Number : 111111 Transaction Type : deposit, cash Amount : 66000

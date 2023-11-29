@@ -19,9 +19,9 @@ int main() {
     cout << "====================================================\n";
 
     // Containers
-    map<string, Bank *> banks;       // Name: Bank
-    map<int, ATM *> ATMs;            // SN: ATM
-    map<int, Card *> cardMap;        // No: Card
+    map<string, Bank*> banks;       // Name: Bank
+    map<int, ATM*> ATMs;            // SN: ATM
+    map<int, Card*> cardMap;        // No: Card
     //map<int, Account *> accountMap;  // No: Account
 
     // Bank
@@ -56,7 +56,8 @@ int main() {
             cin >> bank;
             if (banks.find(bank) != banks.end()) {
                 validBank = true;
-            } else {
+            }
+            else {
                 cout << "[ValueError] Bank not found! Enter a valid bank name!\n";
             }
         } while (!validBank);
@@ -69,7 +70,8 @@ int main() {
             if (ATMs.find(sn) != ATMs.end()) {
                 cout << "[ValueError] Serial number already exists! Enter a valid number!\n";
                 duplicateSerial = true;
-            } else {
+            }
+            else {
                 duplicateSerial = false;
             }
         } while (duplicateSerial);
@@ -79,10 +81,12 @@ int main() {
             if (single == "s" || single == "S") {
                 realsingle = true;
                 break;
-            } else if (single == "m" || single == "M") {
+            }
+            else if (single == "m" || single == "M") {
                 realsingle = false;
                 break;
-            } else {
+            }
+            else {
                 cout << "[ValueError] Invalid input! Enter 'S' or 'M'!\n";
             }
         }
@@ -92,9 +96,11 @@ int main() {
         cin >> tf;
         if (tf == "T" || tf == "t") {
             bilang = true;
-        } else if (tf == "F" || tf == "f") {
+        }
+        else if (tf == "F" || tf == "f") {
             bilang = false;
-        } else {
+        }
+        else {
             cout << "[ValueError] Invalid input! Enter 'T' or 'F'!\n";
         }
         cout << "Amount of 1000won : ";
@@ -111,7 +117,21 @@ int main() {
 
     // Card
     // ADMIN's Card
-    int admin = 000000;
+    cout << endl;
+    int admin = 10;
+    cout << "Set the admin's Card Number." << endl;
+    cin >> admin ;
+    string adminbank = "none";
+    string username = "user";
+    int funds = 123456789;
+    banks[adminbank] = new Bank(adminbank);
+
+    string adminpassword;
+    cout << "Set the admin's password" << endl;
+    cin >> adminpassword;
+    cardMap[admin] = new Card(adminbank, username, admin, funds, adminpassword);
+    cout << "Admin created" << endl;
+    cout << endl;
 
     // Customers' Cards
     int numOfAccounts;
@@ -130,7 +150,8 @@ int main() {
             cout << "Bank Name          : "; cin >> bank;
             if (banks.find(bank) != banks.end()) {
                 validBank = true;
-            } else {
+            }
+            else {
                 cout << "[ValueError] Bank not found! Enter a valid bank name!\n";
             }
         } while (!validBank);
@@ -141,7 +162,8 @@ int main() {
             if (cardMap.find(accountnum) != cardMap.end()) {
                 cout << "[ValueError] Account number already exists! Enter a valid number!\n";
                 duplicateAccount = true;
-            } else {
+            }
+            else {
                 duplicateAccount = false;
             }
         } while (duplicateAccount);
@@ -153,7 +175,7 @@ int main() {
     // Fee
     cout << "\n[Init] Please init Fee instances\n";
     string feename = "fee";
-    Fee *fee = new Fee(feename);
+    Fee* fee = new Fee(feename);
 
 
     /*
@@ -200,24 +222,29 @@ int main() {
                     cout << "=================================\n";
                     goBack = false;
                     break;
-                } else if (yn == "N" || yn == "n") {
+                }
+                else if (yn == "N" || yn == "n") {
                     cout << "\n Returning to the Base session.\n";
                     cout << "=================================\n";
                     goBack = true;
                     break;
-                } else {
+                }
+                else {
                     cout << "[ValueError] Invalid input! Enter 'Y' or 'N'!\n";
                 }
             }
             if (goBack) {
                 selected = 0;
-            } else {
+            }
+            else {
                 break;
             }
         }
         else if (selected == 1) { // ATM Session
             int sn;
-            ATM *currentATM;
+            ATM* currentATM;
+            ofstream history("transaction_history.txt"); // ÆÄÀÏ ¿­±â
+            ofstream receipt("receipt.txt"); // ÆÄÀÏ ¿­±â
             while (true) {
                 cout << "[ATM] Select an ATM. Serial Numbers: ";
                 cin >> sn;
@@ -225,26 +252,47 @@ int main() {
                 if (find != ATMs.end()) { // Exists
                     currentATM = ATMs[sn];
                     break;
-                } else { // Error
+                }
+                else { // Error
                     cout << "[ValueError] Invalid serial number! Enter a valid serial number!\n";
                 }
             }
             // Insert a Card
             int no;
-            Card *currentCard;
+            Card* currentCard;
             while (true) {
                 cout << "[Card] Insert a card to start: ";
                 cin >> no;
                 auto find = cardMap.find(no);
-                if (no == admin) {
+                string cardpassword;
+                cout << "Password : ";
+                cin >> cardpassword;
+          
+                if (no == admin && cardMap[no]->verifyPassword(cardpassword) == true) {
                     // Admin
                     currentATM->adminMenu();
                     break;
-                } else if (find != cardMap.end()) { // Exists
-                    currentCard = cardMap[no];
-                    break;
-                } else { // Error
-                    cout << "[ValueError] Invalid card! Insert a valid card!\n";
+
+
+                }
+                else if (cardMap[no]->verifyPassword(cardpassword) == true && find != cardMap.end()) { // Exists
+                    
+                    if (currentATM->isSingleBank() == true) {
+                        if (cardMap[no]->getPrimary(currentATM) == true) {
+                            currentCard = cardMap[no];
+                            break;
+                        }
+                        else {
+                            cout << "[Error] This card cannot be used in this ATM. Try another card." << endl;
+                        }
+                    }
+                    else {
+                        currentCard = cardMap[no];
+                        break;
+                    }
+                }
+                else { // Error
+                    cout << "[Error] Invalid card! Insert a valid card!\n";
                 }
             }
 
@@ -252,24 +300,101 @@ int main() {
             cout << "=================================\n";
             if (currentATM->isBilingual()) { // If bilingual
                 currentATM->selectLanguage();
-            } else { // If unilingual
+            }
+            else { // If unilingual
                 currentATM->setEN();
             }
             cout << "=================================\n";
             // Divide Language
-            if (currentATM->getKR()) {
+            if (currentATM->getKR() == true) {
                 // KR version
                 while (selected != 6) {
                     // View Options
-                    cout << "[ì •ìˆ˜ë¡œ ì˜µì…˜ì„ ì„ íƒí•´ì£¼ì„¸ìš”.]\n";
-                    cout << " 1) ì˜ˆê¸ˆ\n";
-                    cout << " 2) ì¶œê¸ˆ\n";
-                    cout << " 3) í˜„ê¸ˆ ì´ì²´\n";
-                    cout << " 4) ê³„ì¢Œ ì´ì²´\n";
-                    cout << " 5) ì˜ìˆ˜ì¦ ì¶œë ¥\n";
-                    cout << " 6) ì¢…ë£Œ\n";
-                    cout << " - ì„ íƒ: ";
-                    cin >> selected;
+                    cout << "[Á¤¼ö·Î ¿É¼ÇÀ» ¼±ÅÃÇØÁÖ¼¼¿ä.]\n";
+                    cout << " 1) ¿¹±Ý\n";
+                    cout << " 2) Ãâ±Ý\n";
+                    cout << " 3) Çö±Ý ÀÌÃ¼\n";
+                    cout << " 4) °èÁÂ ÀÌÃ¼\n";
+                    cout << " 5) ¿µ¼öÁõ Ãâ·Â\n";
+                    cout << " 6) Á¾·á\n";
+                    cout << " - ¼±ÅÃ: ";cin >> selected;
+                    if (selected == 1) {
+                        //Deposit
+                        string type = "deposit";
+                        Transaction deposit(currentATM, currentCard, type, fee);
+                    }
+                    else if (selected == 2) {
+                        //Withdrawal
+                        string type = "withdrawal";
+                        Transaction withdrawal(currentATM, currentCard, type, fee);
+                    }
+                    else if (selected == 3) {
+                        // Cash Transfer
+                        int accountNum;
+                        Card* currentAccount;
+                        string type = "cashtransfer";
+                        while (true) {
+                            cout << "¾î´À °èÁÂ·Î º¸³»°í ½ÍÀ¸½Å°¡¿ä?" << endl;
+                            cin >> accountNum;
+                            auto find = cardMap.find(accountNum);
+                            if (find != cardMap.end()) { // Exists
+                                currentAccount = cardMap[accountNum];
+                                Transaction cashtransfer(currentATM, currentAccount, type, fee);
+                                break;
+                            }
+                            else { // Error
+                                cout << "[¿¡·¯] °èÁÂ ¹øÈ£°¡ Àß¸øµÇ¾ú½À´Ï´Ù. À¯È¿ÇÑ °èÁÂ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä!\n";
+                            }
+                        }
+                    }
+                    else if (selected == 4) {
+                        // Account Transfer
+                        int accountNum;
+                        Card* currentAccount;
+                        string type = "cashAccount";
+                        while (true) {
+                            cout << "¾î´À °èÁÂ·Î º¸³»°í ½ÍÀ¸½Å°¡¿ä?" << endl;
+                            cin >> accountNum;
+                            auto find = cardMap.find(accountNum);
+                            if (find != cardMap.end()) { // Exists
+                                currentAccount = cardMap[accountNum];
+                                Transaction accounttransfer(currentATM, currentCard, currentAccount, type, fee);
+                                break;
+                            }
+                            else { // Error
+                                cout << "[¿¡·¯] °èÁÂ ¹øÈ£°¡ Àß¸øµÇ¾ú½À´Ï´Ù. À¯È¿ÇÑ °èÁÂ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä!\n";
+                            }
+                        }
+                    }
+                    else if (selected == 5) {
+                        // Print a Receipt
+                        vector<string> data;
+                        ifstream file("receipt.txt");
+
+                        if (file.is_open()) {
+                            string line;
+                            while (getline(file, line)) {
+                                data.push_back(line);
+                            }
+                            cout << "ÆÄÀÏ¿¡¼­ µ¥ÀÌÅÍ¸¦ ºÒ·¯¿É´Ï´Ù:\n";
+
+                            for (const auto& line : data) {
+                                cout << line << endl;
+                            }
+                        }
+                        else {
+                            cerr << "ÆÄÀÏ ÀÐ±â¸¦ ½ÇÆÐÇÏ¿´½À´Ï´Ù.\n";
+                        }
+                    }
+                    else if (selected == 6) {
+                        // Exit
+                        currentATM->deleteFile();
+                        cout << " Exit  " << endl;
+                        break;
+                    }
+                    else {
+                        cout << "[¿¡·¯] Á¦´ë·ÎµÈ °ªÀ» ÀÔ·ÂÇÏ¼¼¿ä. (1) ~ (6).!\n\n";
+                    }
                 }
             }
             else {
@@ -355,6 +480,9 @@ int main() {
                     }
                     else if (selected == 6) {
                         // Exit
+                        if (receipt.is_open()) {
+                            receipt.close();
+                        }
                         currentATM->deleteFile();
                         cout << " Exit  " << endl;
                         break;
@@ -364,6 +492,7 @@ int main() {
                     }
                 }
             }
+            
         }
         else {
             cout << "[ValueError] Enter a valid option among (1) ~ (4).!\n\n";
@@ -374,12 +503,12 @@ int main() {
     * [Deallocation]
     */
     // Delete Banks
-    for (auto& bank: banks) {
+    for (auto& bank : banks) {
         delete bank.second;
     }
     banks.clear();
     // Delete ATMs
-    for (auto& atm: ATMs) {
+    for (auto& atm : ATMs) {
         delete atm.second;
     }
     ATMs.clear();
@@ -389,11 +518,10 @@ int main() {
 //    }
 //    accountMap.clear();
     // Delete Cards
-    for (auto& card: cardMap) {
+    for (auto& card : cardMap) {
         delete card.second;
     }
     cardMap.clear();
-
     return 0;
 }
 

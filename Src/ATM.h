@@ -32,6 +32,9 @@ public:
     bool getKR();
     string getPrimaryBank();
 
+    bool isSingleBank();
+
+
     // Transaction
     void transaction();
     void updateCashAmmount(bool isDeposit);
@@ -66,7 +69,7 @@ public:
     }
     void adminMenu() {
         int choice;
-        while (choice != 2) {
+        while (true) {
             // View Options
             cout << "\n==========[Admin Menu]===========\n";
             cout << "Please select an option as an integer.\n";
@@ -74,9 +77,9 @@ public:
             cout << "      2) Exit\n";
             cout << " - Select: ";
             cin >> choice;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             if (choice == 1) {
                 viewTransactionHistory();
-                break;
             }
             else if (choice == 2) {
                 cout << "Exiting Admin Menu\n";

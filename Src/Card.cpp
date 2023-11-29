@@ -20,7 +20,7 @@ bool Card::verifyPassword(string inputPassword) {
     return password_ == inputPassword;
 }
 
-bool Card:: accessAccount() {
+bool Card::accessAccount() {
     if (verifyPassword(getPasswordFromUser())) {
         cout << "Accessing Account ... \n ";
         return true;
