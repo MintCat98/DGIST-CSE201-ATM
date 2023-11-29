@@ -12,6 +12,7 @@ ATM::ATM(Bank* primary, int sNum, bool single, bool lang, map<int, int> cash) {
     this->biLanguage = lang;
     this->cashAmount = cash;
     cout << "[Const-A] A new (ATM " << this->aID << ") is added.\n";
+
 }
 ATM::~ATM() {
     cout << "[Dest-A] ATM No." << this->serialNum << "is deleted.\n";

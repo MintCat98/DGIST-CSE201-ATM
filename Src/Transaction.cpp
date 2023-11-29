@@ -2,23 +2,28 @@
 #include <cstdio>
 Transaction::Transaction(ATM* serialNumber, Card* cardNumber, string type, Fee* fee) {
 
-    // Transaction ê³µí†µì‚¬í•­
+    // Transaction °øÅë»çÇ×
 
-    this->cardNum = cardNumber->getAccountNum(); // Transactionì˜ cardnumì„ ì§€ì •
-    this->transType = type;					  // Transtypeì„ ì§€ì •
+    this->cardNum = cardNumber->getAccountNum(); // TransactionÀÇ cardnumÀ» ÁöÁ¤
+    this->transType = type;					  // TranstypeÀ» ÁöÁ¤
     this->transactionID = (100 * serialNumber->getSerialNum()) + serialNumber->getTransNum();
-    // ì„ì˜ë¡œ ê±°ë˜ idë¥¼ ATMì˜ ì‹œë¦¬ì–¼ ë„˜ë²„ì— 100ì„ ê³±í•œ í›„, TransNumì„ ë”í•´ì¤€ë‹¤.
+    // ÀÓÀÇ·Î °Å·¡ id¸¦ ATMÀÇ ½Ã¸®¾ó ³Ñ¹ö¿¡ 100À» °öÇÑ ÈÄ, TransNumÀ» ´õÇØÁØ´Ù.
     serialNumber->setTransNum(serialNumber->getTransNum() + 1);
-    // ê±°ë˜ ë²ˆí˜¸ë¥¼ 1 ë”í•´ì„œ ì €ì¥í•´ ë‘”ë‹¤.
-    cout << "[Constructor]New transaction Created: (" << this->transactionID << ")";
+    // °Å·¡ ¹øÈ£¸¦ 1 ´õÇØ¼­ ÀúÀåÇØ µĞ´Ù.
+    if (serialNumber->getKR() == true) {
+        cout <<"[»ı¼ºÀÚ] »õ·Î¿î °Å·¡°¡ »ı¼ºµÇ¾ú½À´Ï´Ù!: (" << this->transactionID << ")" << endl;
+    }
+    else {
+        cout << "[Constructor]New transaction Created: (" << this->transactionID << ")"<< endl;
+    }
 
     // deposit or withdrawal
 
     if (type == "deposit") {
-        this->deposit(serialNumber, cardNumber, fee); // depositì„ typeìœ¼ë¡œ ë°›ìœ¼ë©´, deposit ì‹¤í–‰
+        this->deposit(serialNumber, cardNumber, fee); // depositÀ» typeÀ¸·Î ¹ŞÀ¸¸é, deposit ½ÇÇà
     }
     else if (type == "withdrawal") {
-        this->withdrawal(serialNumber, cardNumber, fee); // withdrawalì´ë©´ withdrawal ì‹¤í–‰
+        this->withdrawal(serialNumber, cardNumber, fee); // withdrawalÀÌ¸é withdrawal ½ÇÇà
     }
     else if (type == "cashtransfer") {
         this->cashtransfer(serialNumber, cardNumber, fee);
@@ -31,227 +36,341 @@ Transaction::~Transaction() {
 
 void Transaction::deposit(ATM* serialNumber, Card* cardNumber, Fee* fee) {
 
-    // cash , checkë¥¼ íŒëª…í•œë‹¤.
-
-    cout << "Cash or Check?" << endl;
-    string cashorcheck;
+    // cash , check¸¦ ÆÇ¸íÇÑ´Ù.
+    if (serialNumber->getKR() == true) {
+        cout << "[Çö±İ = 0 / ¼öÇ¥ = 1]" << endl;
+    }
+    else {
+        cout << "[Cash = 0 / Check = 1]" << endl;
+    }
+    int cashorcheck;
     cin >> cashorcheck;
-
-    if (cashorcheck == "Cash" || cashorcheck == "cash") {
+    if (cashorcheck == 0 ) {
         this->addcash(serialNumber, cardNumber, fee);
     }
-    else if (cashorcheck == "Check" || cashorcheck == "check") {
+    else if (cashorcheck == 1) {
         this->addcheck(serialNumber, cardNumber, fee);
     }
 }
 
 void Transaction::addcash(ATM* serialNumber, Card* cardNumber, Fee* fee) {
-    cout << "Please tell me how many bills you would like to put in each unit." << endl;
-    cout << "KRW 1,000, KRW 5,000,KRW 10,000, KRW 50,000" << endl;
-    // ì²œì›, ì˜¤ì²œì› , ë§Œì› ,ì˜¤ë§Œì›ê¶Œ ì–¼ë§ˆë¥¼ ë„£ì„ì§€ ê³ ë¥¸ë‹¤.
+    if (serialNumber->getKR() == true) {
+        cout << "°¢°¢ ÁöÆó¸¦ ¾ó¸¶³ª ³ÖÀ»Áö ¼ø¼­´ë·Î ¸»¾¸ÇØ ÁÖ¼¼¿ä.[0 0 0 0]" << endl;
+        cout << "1000¿ø, 5000¿ø, 10000¿ø, 50000¿ø" << endl;
+    }
+    else {
+        cout << "Number of each bills. [0 0 0 0]" << endl;
+        cout << "KRW 1,000, KRW 5,000,KRW 10,000, KRW 50,000" << endl;
+    }
+
+    // Ãµ¿ø, ¿ÀÃµ¿ø , ¸¸¿ø ,¿À¸¸¿ø±Ç ¾ó¸¶¸¦ ³ÖÀ»Áö °í¸¥´Ù.
     int c, oc, m, om;
     cin >> c >> oc >> m >> om;
     int billamount = c + oc + m + om;
     int balanceadd = 1000 * c + 5000 * oc + 10000 * m + 50000 * om;
 
 
-    int feemoney = 0; // ìˆ˜ìˆ˜ë£Œ ì±…ì •
+    int feemoney = 0; // ¼ö¼ö·á Ã¥Á¤
     if (cardNumber->getPrimary(serialNumber) == true) {
-        // primaryê°€ ë§ì„ ë•Œ, ì •í•´ë†“ì•˜ë˜ feeë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
+        // primary°¡ ¸ÂÀ» ¶§, Á¤ÇØ³õ¾Ò´ø fee¸¦ ºÒ·¯¿Â´Ù.
         feemoney = fee->getdpFeePrim();
-        cout << " The fee is " << feemoney << " won.Your card is primary." << endl;
+        if (serialNumber->getKR() == true) {
+            cout << " ¼ö¼ö·á´Â " << feemoney << "¿øÀÔ´Ï´Ù. ´ç½ÅÀÇ Ä«µå´Â ÁÖ°Å·¡ Ä«µåÀÔ´Ï´Ù. " << endl;
+        }
+        else {
+            cout << " The fee is " << feemoney << "won. Your card is primary." << endl;
+        }
+        
     }
     else {
-        // ì•„ë‹ ë•Œ, feeë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
+        // ¾Æ´Ò ¶§, fee¸¦ ºÒ·¯¿Â´Ù.
         feemoney = fee->getdpFeeNonp();
-        cout << " The fee is " << feemoney << " won.Your card is non - primary." << endl;
+        if (serialNumber->getKR() == true) {
+            cout << " ¼ö¼ö·á´Â " << feemoney << " ¿øÀÔ´Ï´Ù. ´ç½ÅÀÇ Ä«µå´Â ÁÖ°Å·¡ Ä«µå°¡ ¾Æ´Õ´Ï´Ù. " << endl;
+        }
+        else {
+            cout << " The fee is " << feemoney << " won.Your card is non-primary." << endl;
+        }
     }
-
-
-
 
     if (billamount > 50 || balanceadd < feemoney) {
-        cout << " Error amount. " << endl; // ìˆ˜ìˆ˜ë£Œë³´ë‹¤ ì‘ì€ ê°’ì´ê±°ë‚˜, billamount ì´ˆê³¼ì¹˜ë¥¼ ë„˜ì–´ì„¤ ê²½ìš° ì˜¤ë¥˜ ë°˜í™˜.
+        if (serialNumber->getKR() == true) {
+            cout << " ÀûÀıÇÏÁö ¾ÊÀº ¾çÀÔ´Ï´Ù. 50Àå ÀÌ»óÀÌ°Å³ª, ¼ö¼ö·áº¸´Ù Àû½À´Ï´Ù. " << endl; // ¼ö¼ö·áº¸´Ù ÀÛÀº °ªÀÌ°Å³ª, billamount ÃÊ°úÄ¡¸¦ ³Ñ¾î¼³ °æ¿ì ¿À·ù ¹İÈ¯.
+        }
+        else {
+            cout << " Error amount. " << endl; // ¼ö¼ö·áº¸´Ù ÀÛÀº °ªÀÌ°Å³ª, billamount ÃÊ°úÄ¡¸¦ ³Ñ¾î¼³ °æ¿ì ¿À·ù ¹İÈ¯.
+        }
     }
     else {
-
-        cout << " Successfully deposited " << balanceadd << " on card number" << cardNumber->getAccountNum() << endl;
-        // cardì˜ account ë¶€ë¶„ì˜ balanceë¥¼ êµì²´í•œë‹¤. ì´ëŠ” ê¸°ì¡´ ì”ì•¡ì—ì„œ ì¶”ê°€ ì”ì•¡ì„ ë”í•˜ê³ , ìˆ˜ìˆ˜ë£Œë¥¼ ëº€ ê°’ì´ë‹¤.
+        if (serialNumber->getKR() == true) {
+            cout << " ¼º°øÀûÀ¸·Î  " << balanceadd << "¿øÀ» " << cardNumber->getAccountNum() << "¿¡ ÀÔ±İÇÏ¿´½À´Ï´Ù." << endl;
+        }
+        else {
+            cout << " Successfully deposited " << balanceadd << " on card number" << cardNumber->getAccountNum() << endl; 
+        }
+        
+        // cardÀÇ account ºÎºĞÀÇ balance¸¦ ±³Ã¼ÇÑ´Ù. ÀÌ´Â ±âÁ¸ ÀÜ¾×¿¡¼­ Ãß°¡ ÀÜ¾×À» ´õÇÏ°í, ¼ö¼ö·á¸¦ »« °ªÀÌ´Ù.
         cardNumber->setbalance(cardNumber->getbalance() + balanceadd - feemoney);
 
-        // ê° ì§€íë³„ë¡œ ì¦ê°€ì‹œí‚´.
+        // °¢ ÁöÆóº°·Î Áõ°¡½ÃÅ´.
         serialNumber->set1000won(serialNumber->get1000won() + c);
         serialNumber->set5000won(serialNumber->get5000won() + oc);
         serialNumber->set10000won(serialNumber->get10000won() + m);
         serialNumber->set50000won(serialNumber->get50000won() + om);
         serialNumber->setCashAmount(serialNumber->getCashAmount() + balanceadd);
 
-
-
-        // transaction_history.txtì— ì ì°¨ ì¶”ê°€í•¨.
-        ofstream history("transaction_history.txt");
+        ofstream history("transaction_history.txt", ios_base::app);
         if (history.is_open()) {
-            history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
+            history << "Transaction ID : " << this->transactionID << " / Card Number : " << cardNumber->getAccountNum() << " / Transaction Type : " << this->transType << " / Cash" << " Amount : " << balanceadd << "\n";
         }
         history.close();
-        ofstream receipt("receipt.txt");
+        ofstream receipt("receipt.txt", ios::app);
         if (receipt.is_open()) {
-            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
+            receipt << "Transaction ID : " << this->transactionID << " / Card Number : " << cardNumber->getAccountNum() << " / Transaction Type : " << this->transType << " / Cash" << " Amount : " << balanceadd << "\n";
         }
         receipt.close();
     }
 }
 
 void Transaction::addcheck(ATM* serialNumber, Card* cardNumber, Fee* fee) {
-    cout << "Please tell me how many checks. The limit is 10." << endl;
+    if (serialNumber->getKR() == true) {
+        cout << "¼öÇ¥ ¸î ÀåÀ» ³ÖÀ¸½Ç °Ç°¡¿ä? (ÃÖ´ë 10Àå)" << endl;
+    }
+    else {
+        cout << "Number of checks (Max : 10)" << endl;
+    }
     int howmanychecks;
     cin >> howmanychecks;
     if (howmanychecks > 10) {
-        cout << "Sorry." << endl;
+        if (serialNumber->getKR() == true) {
+            cout << "ÁË¼ÛÇÕ´Ï´Ù. 10ÀåÀÌ ³Ñ¾ú½À´Ï´Ù." << endl;
+        }
+        else {
+            cout << "Sorry. You put more than 10." << endl;
+        }
     }
     else {
         int balanceadd = 0;
         for (int i = 0; i < howmanychecks; i++) {
-            cout << "What value?" << endl;
+            if (serialNumber->getKR() == true) {
+                cout << "¼öÇ¥ ±İ¾×À» ÀÔ·ÂÇÏ½Ê½Ã¿À." << endl;
+            }
+            else {
+                cout << "Put the value of Check." << endl;
+            }
             int value;
-            cin >> value;
+            do{
+                cin >> value;
+                if (value < 100000){
+                    if (serialNumber->getKR() == true) {
+                        cout << "¼öÇ¥ÀÇ ÃÖ¼Ò ±İ¾×Àº 100,000¿øºÎÅÍÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇÏ½Ê½Ã¿À.\n";
+                    }
+                    else{
+                        cout<< "Minimum value of the check is 100,000won. Try again.\n";
+                    }
+                }
+            }while (value < 100000);
             balanceadd += value;
         }
-
-        int feemoney = 0; // ìˆ˜ìˆ˜ë£Œ ì±…ì •
+        int feemoney = 0; // ¼ö¼ö·á Ã¥Á¤
         if (cardNumber->getPrimary(serialNumber) == true) {
-            // primaryê°€ ë§ì„ ë•Œ, ì •í•´ë†“ì•˜ë˜ feeë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
+            // primary°¡ ¸ÂÀ» ¶§, Á¤ÇØ³õ¾Ò´ø fee¸¦ ºÒ·¯¿Â´Ù.
             feemoney = fee->getdpFeePrim();
-            cout << " The fee is " << feemoney << " won.Your card is primary." << endl;
+            if (serialNumber->getKR() == true) {
+                cout << " ¼ö¼ö·á´Â " << feemoney << "¿øÀÔ´Ï´Ù. ´ç½ÅÀÇ Ä«µå´Â ÁÖ°Å·¡ Ä«µåÀÔ´Ï´Ù." << endl;
+            }
+            else {
+                cout << " The fee is " << feemoney << "won. Your card is primary." << endl;
+            }
+            
         }
         else {
-            // ì•„ë‹ ë•Œ, feeë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
+            // ¾Æ´Ò ¶§, fee¸¦ ºÒ·¯¿Â´Ù.
             feemoney = fee->getdpFeeNonp();
-            cout << " The fee is " << feemoney << " won.Your card is non - primary." << endl;
+            if (serialNumber->getKR() == true) {
+                cout << " ¼ö¼ö·á´Â " << feemoney << "¿øÀÔ´Ï´Ù. ´ç½ÅÀÇ Ä«µå´Â ÁÖ°Å·¡ Ä«µå°¡ ¾Æ´Õ´Ï´Ù." << endl;
+            }
+            else {
+                cout << " The fee is " << feemoney << "won. Your card is non-primary." << endl;
+            }
         }
 
-
-        cout << " Successfully deposited " << balanceadd << " on card number" << cardNumber->getAccountNum() << endl;
+        if (serialNumber->getKR() == true) {
+            cout << " ¼º°øÀûÀ¸·Î  " << balanceadd << "¿øÀ» " << cardNumber->getAccountNum() << "¿¡ ÀÔ±İÇÏ¿´½À´Ï´Ù." << endl;
+        }
+        else {
+            cout << " Successfully deposited " << balanceadd << " on card number" << cardNumber->getAccountNum() << endl;
+        }
         cardNumber->setbalance(cardNumber->getbalance() + balanceadd - feemoney);
-        ofstream history("transaction_history.txt");
+        ofstream history("transaction_history.txt", ios_base::app);
         if (history.is_open()) {
-            history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", check" << " Amount : " << balanceadd << "\n";
+            history << "Transaction ID : " << this->transactionID << " / Card Number : " << cardNumber->getAccountNum() << " / Transaction Type : " << this->transType << " / Check" << " Amount : " << balanceadd << "\n";
         }
         history.close();
 
-        ofstream receipt("receipt.txt");
+        ofstream receipt("receipt.txt", ios::app);
         if (receipt.is_open()) {
-            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", check" << " Amount : " << balanceadd << "\n";
+            receipt << "Transaction ID : " << this->transactionID << " / Card Number : " << cardNumber->getAccountNum() << " / Transaction Type : " << this->transType << " / Check" << " Amount : " << balanceadd << "\n";
         }
         receipt.close();
     }
 }
 
 void Transaction::withdrawal(ATM* serialNumber, Card* cardNumber, Fee* fee) {
-    int i = 1;
-    while (i < 4) {
-        cout << "How much fund to withdraw?" << endl;
-        int withdrawamount = 0;
-        cin >> withdrawamount;
+    if (serialNumber->getKR() == true) {
+        cout << "¾ó¸¶¸¦ Ã£À¸½Ç °ÍÀÎÁö ÀÔ·ÂÇÏ¿© ÁÖ½Ê½Ã¿À." << endl;
+    }
+    else {
+        cout << "Withdraw amount" << endl;
+    }
+    int withdrawamount = 0;
+    cin >> withdrawamount;
 
-        bool canwithdrawal = true;
-        int c, oc, m, om;
-        int amount;
-        amount = withdrawamount;
-        // 5ë§Œì› ì œê±°ì‹
-        int noteCount = amount / 50000;
-        if (noteCount > serialNumber->get50000won()) {
-            noteCount = serialNumber->get50000won();
-        }
-        om = noteCount;
-        serialNumber->set50000won(serialNumber->get50000won() - noteCount);
-        amount -= 50000 * noteCount;
-        // ë§Œì› ì œê±°ì‹
-        noteCount = amount / 10000;
-        if (noteCount > serialNumber->get10000won()) {
-            noteCount = serialNumber->get10000won();
-        }
-        m = noteCount;
-        serialNumber->set10000won(serialNumber->get10000won() - noteCount);
-        amount -= 10000 * noteCount;
-        // 5ì²œì› ì œê±°ì‹
-        noteCount = amount / 5000;
-        if (noteCount > serialNumber->get5000won()) {
-            noteCount = serialNumber->get5000won();
-        }
-        oc = noteCount;
-        serialNumber->set5000won(serialNumber->get5000won() - noteCount);
-        amount -= 5000 * noteCount;
-        // ì²œì› ì œê±°ì‹
-        noteCount = amount / 1000;
-        if (noteCount > serialNumber->get1000won()) {
-            noteCount = serialNumber->get1000won();
-        }
-        c = noteCount;
-        serialNumber->set1000won(serialNumber->get1000won() - noteCount);
-        amount -= 1000 * noteCount;
-        if (amount > 0) {
-            canwithdrawal = false;
-        }
+    bool canwithdrawal = true;
+    int c, oc, m, om;
+    int amount;
+    amount = withdrawamount;
 
-        int feemoney = 0; // ìˆ˜ìˆ˜ë£Œ ì±…ì •
-        if (cardNumber->getPrimary(serialNumber) == true) {
-            // primaryê°€ ë§ì„ ë•Œ, ì •í•´ë†“ì•˜ë˜ feeë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
-            feemoney = fee->getwdFeePrim();
-            cout << " The fee is " << feemoney << "won.Your card is primary." << endl;
+    // 5¸¸¿ø Á¦°Å½Ä
+    int noteCount = amount / 50000;
+    if (noteCount > serialNumber->get50000won()) {
+        noteCount = serialNumber->get50000won();
+    }
+    om = noteCount;
+    amount -= 50000 * noteCount;
+
+
+    // ¸¸¿ø Á¦°Å½Ä
+    noteCount = amount / 10000;
+    if (noteCount > serialNumber->get10000won()) {
+        noteCount = serialNumber->get10000won();
+    }
+    m = noteCount;
+    amount -= 10000 * noteCount;
+
+
+    // 5Ãµ¿ø Á¦°Å½Ä
+    noteCount = amount / 5000;
+    if (noteCount > serialNumber->get5000won()) {
+        noteCount = serialNumber->get5000won();
+    }
+    oc = noteCount;
+    amount -= 5000 * noteCount;
+
+
+    // Ãµ¿ø Á¦°Å½Ä
+    noteCount = amount / 1000;
+    if (noteCount > serialNumber->get1000won()) {
+        noteCount = serialNumber->get1000won();
+    }
+    c = noteCount;
+    amount -= 1000 * noteCount;
+
+
+    if (amount > 0) {
+        canwithdrawal = false;
+    }
+
+    int feemoney = 0; // ¼ö¼ö·á Ã¥Á¤
+    if (cardNumber->getPrimary(serialNumber) == true) {
+        // primary°¡ ¸ÂÀ» ¶§, Á¤ÇØ³õ¾Ò´ø fee¸¦ ºÒ·¯¿Â´Ù.
+        feemoney = fee->getwdFeePrim();
+        if (serialNumber->getKR() == true) {
+            cout << " ¼ö¼ö·á´Â " << feemoney << "¿øÀÔ´Ï´Ù. ´ç½ÅÀÇ Ä«µå´Â ÁÖ°Å·¡ Ä«µåÀÔ´Ï´Ù." << endl;
         }
         else {
-            // ì•„ë‹ ë•Œ, feeë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
-            feemoney = fee->getwdFeeNonp();
-            cout << " The fee is " << feemoney << "won.Your card is non - primary." << endl;
+            cout << " The fee is " << feemoney << "won. Your card is primary." << endl;
         }
 
-        if (withdrawamount + feemoney < cardNumber->getbalance()) {
-            cout << "Sorry, you don't have enough money in your card." << endl;
+    }
+    else {
+        // ¾Æ´Ò ¶§, fee¸¦ ºÒ·¯¿Â´Ù.
+        feemoney = fee->getwdFeeNonp();
+        if (serialNumber->getKR() == true) {
+            cout << " ¼ö¼ö·á´Â " << feemoney << "¿øÀÔ´Ï´Ù. ´ç½ÅÀÇ Ä«µå´Â ÁÖ°Å·¡ Ä«µå°¡ ¾Æ´Õ´Ï´Ù." << endl;
         }
-        else if (withdrawamount % 1000 != 0) {
+        else {
+            cout << " The fee is " << feemoney << "won. Your card is non-primary." << endl;
+        }
+    }
+
+    if (withdrawamount + feemoney > cardNumber->getbalance()) {
+        if (serialNumber->getKR() == true) {
+            cout << "ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù." << endl;
+        }
+        else {
+            cout << "Not enough money." << endl;
+        }
+    }
+    else if (withdrawamount % 1000 != 0) {
+        if (serialNumber->getKR() == true) {
+            cout << "1000¿øÀÇ ¹è¼ö·Î ÀÔ·ÂÇØ ÁÖ½Ê½Ã¿À." << endl;
+        }
+        else {
             cout << "Please make the unit correctly." << endl;
         }
-        else if (withdrawamount > serialNumber->getCashAmount() || canwithdrawal == false) {
-            cout << "ATM Cash lack" << endl;
+    }
+    else if (withdrawamount > serialNumber->getCashAmount() || canwithdrawal == false) {
+        if (serialNumber->getKR() == true) {
+            cout << "ATMÀÇ º¸À¯ Çö±İÀÌ ºÎÁ·ÇÕ´Ï´Ù." << endl;
+        }
+        else {
+            cout << "Not enough bills in the ATM." << endl;
+        }
+    }
+    else {
+        if (serialNumber->getKR() == true) {
+            cout << withdrawamount << "¿øÀÌ ÀÎÃâµÇ¾ú½À´Ï´Ù." << endl;
+            cout << "50000 ¿ø -> " << om << " Àå 10000 ¿ø -> " << m << " Àå 5000 ¿ø -> " << oc << " Àå 1000 ¿ø -> " << c << " ÀåÀÔ´Ï´Ù." << endl;
         }
         else {
             cout << "Here is your money. " << withdrawamount << " won." << endl;
             cout << "50000 bill -> " << om << " 10000 bill -> " << m << " 5000 bill -> " << oc << " 1000 bill -> " << c << endl;
-
-            serialNumber->set1000won(serialNumber->get1000won() - c);
-            serialNumber->set5000won(serialNumber->get5000won() - oc);
-            serialNumber->set10000won(serialNumber->get10000won() - m);
-            serialNumber->set50000won(serialNumber->get50000won() - om);
-            serialNumber->setCashAmount(serialNumber->getCashAmount() - withdrawamount);
-            cardNumber->setbalance(cardNumber->getbalance() - withdrawamount - feemoney);
-
-
-            cout << " Successfully withdrawed " << withdrawamount << " on card number" << cardNumber->getAccountNum() << endl;
-
-
-            ofstream history("transaction_history.txt");
-            if (history.is_open()) {
-                history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << " Amount : " << withdrawamount << "\n";
-            }
-            history.close();
-
-            ofstream receipt("receipt.txt");
-            if (receipt.is_open()) {
-                receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << " Amount : " << withdrawamount << "\n";
-            }
-            receipt.close();
         }
-        i++;
 
+
+        serialNumber->set1000won(serialNumber->get1000won() - c);
+        serialNumber->set5000won(serialNumber->get5000won() - oc);
+        serialNumber->set10000won(serialNumber->get10000won() - m);
+        serialNumber->set50000won(serialNumber->get50000won() - om);
+        serialNumber->setCashAmount(serialNumber->getCashAmount() - withdrawamount);
+        cardNumber->setbalance(cardNumber->getbalance() - withdrawamount - feemoney);
+
+        if (serialNumber->getKR() == true) {
+            cout << " ¼º°øÀûÀ¸·Î " << withdrawamount << "¿øÀÌ Ä«µå ¹øÈ£ " << cardNumber->getAccountNum() << "¿¡¼­ ÀÎÃâ µÇ¾ú½À´Ï´Ù." << endl;
+        }
+        else {
+            cout << " Successfully withdrawn " << withdrawamount << " with card number " << cardNumber->getAccountNum() << endl;
+        }
+
+
+        ofstream history("transaction_history.txt", ios_base::app);
+        if (history.is_open()) {
+            history << "Transaction ID : " << this->transactionID << " / Card Number : " << cardNumber->getAccountNum() << " / Transaction Type : " << this->transType << " / Amount : " << withdrawamount << "\n";
+        }
+        history.close();
+
+        ofstream receipt("receipt.txt", ios::app);
+        if (receipt.is_open()) {
+            receipt << "Transaction ID : " << this->transactionID << " / Card Number : " << cardNumber->getAccountNum() << " / Transaction Type : " << this->transType << " / Amount : " << withdrawamount << "\n";
+        }
+        receipt.close();
     }
-
 }
 
 
 void Transaction::cashtransfer(ATM* serialNumber, Card* cardNumber, Fee* fee) {
-    cout << "Please tell me how many bills you would like to put in each unit." << endl;
-    cout << "KRW 1,000, KRW 5,000,KRW 10,000, KRW 50,000" << endl;
+    if (serialNumber->getKR() == true) {
+        cout << "°¢°¢ ÁöÆó¸¦ ¾ó¸¶³ª ³ÖÀ»Áö ¼ø¼­´ë·Î ¸»¾¸ÇØ ÁÖ¼¼¿ä. [0 0 0 0]" << endl;
+        cout << "1000¿ø, 5000¿ø, 10000¿ø, 50000¿ø" << endl;
+    }
+    else {
+        cout << "Put in the number of each bills. [0 0 0 0]" << endl;
+        cout << "KRW 1,000, KRW 5,000,KRW 10,000, KRW 50,000" << endl;
+    }
+
+
+    
     int c, oc, m, om;
     cin >> c >> oc >> m >> om;
     int billamount = c + oc + m + om;
@@ -260,10 +379,17 @@ void Transaction::cashtransfer(ATM* serialNumber, Card* cardNumber, Fee* fee) {
 
 
     if (billamount > 50 || fee->getctFeeAny() > balanceadd) {
-        cout << " Error amount " << endl;
+        if (serialNumber->getKR() == true) {
+            cout << "¿Ã¹Ù¸£Áö ¾ÊÀº ±İ¾×ÀÔ´Ï´Ù. " << endl;
+        }
+        else {
+            cout <<  "Error amount " << endl;
+        }
+
+       
     }
     else {
-        cout << " Successfully transfered " << balanceadd << " on account" << cardNumber->getAccountNum() << endl;
+        
         cardNumber->setbalance(cardNumber->getbalance() + balanceadd - fee->getctFeeAny());
 
         serialNumber->set1000won(serialNumber->get1000won() + c);
@@ -271,115 +397,180 @@ void Transaction::cashtransfer(ATM* serialNumber, Card* cardNumber, Fee* fee) {
         serialNumber->set10000won(serialNumber->get10000won() + m);
         serialNumber->set50000won(serialNumber->get50000won() + om);
         serialNumber->setCashAmount(serialNumber->getCashAmount() + balanceadd);
+        if (serialNumber->getKR() == true) {
+            cout << " ¼º°øÀûÀ¸·Î " << balanceadd << "¿øÀÌ °èÁÂ¹øÈ£ " << cardNumber->getAccountNum() << "ÀÎ °èÁÂ¿¡ ÀÌÃ¼µÇ¾ú½À´Ï´Ù." << endl;
+        }
+        else {
+            cout << " Successfully transferred " << balanceadd << " to account " << cardNumber->getAccountNum() << endl;;
+        }
 
-        ofstream history("transaction_history.txt");
+
+        ofstream history("transaction_history.txt", ios_base::app);
         if (history.is_open()) {
-            history << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
+            history << "Transaction ID : " << this->transactionID << " / Card Number : " << cardNumber->getAccountNum() << " / Transaction Type : " << this->transType << " / Cash" << " Amount : " << balanceadd << "\n";
         }
         history.close();
-        ofstream receipt("receipt.txt");
+        ofstream receipt("receipt.txt", ios::app);
         if (receipt.is_open()) {
-            receipt << "Transaction ID : " << this->transactionID << " Card Number : " << cardNumber->getAccountNum() << " Transaction Type : " << this->transType << ", cash" << " Amount : " << balanceadd << "\n";
+            receipt << "Transaction ID : " << this->transactionID << " / Card Number : " << cardNumber->getAccountNum() << " / Transaction Type : " << this->transType << " / Cash" << " Amount : " << balanceadd << "\n";
         }
         receipt.close();
     }
 }
 
-
-
 Transaction::Transaction(ATM* serialNumber, Card* accountNumberFrom, Card* accountNumberTo, string type, Fee* fee) {
 
-    // Transaction ê³µí†µì‚¬í•­
+    // Transaction °øÅë»çÇ×
     this->cardNum = accountNumberFrom->getAccountNum();
-    this->transType = type;					  // Transtypeì„ ì§€ì •
+    this->transType = type;					  // TranstypeÀ» ÁöÁ¤
     this->transactionID = (100 * serialNumber->getSerialNum()) + serialNumber->getTransNum();
-    // ì„ì˜ë¡œ ê±°ë˜ idë¥¼ ATMì˜ ì‹œë¦¬ì–¼ ë„˜ë²„ì— 100ì„ ê³±í•œ í›„, TransNumì„ ë”í•´ì¤€ë‹¤.
+    // ÀÓÀÇ·Î °Å·¡ id¸¦ ATMÀÇ ½Ã¸®¾ó ³Ñ¹ö¿¡ 100À» °öÇÑ ÈÄ, TransNumÀ» ´õÇØÁØ´Ù.
     serialNumber->setTransNum(serialNumber->getTransNum() + 1);
-    // ê±°ë˜ ë²ˆí˜¸ë¥¼ 1 ë”í•´ì„œ ì €ì¥í•´ ë‘”ë‹¤.
-    cout << "[Constructor]New transaction Created: (" << this->transactionID << ")";
+    // °Å·¡ ¹øÈ£¸¦ 1 ´õÇØ¼­ ÀúÀåÇØ µĞ´Ù.
+    if (serialNumber->getKR() == true) {
+        cout << "[»ı¼ºÀÚ] »õ·Î¿î °Å·¡°¡ »ı¼ºµÇ¾ú½À´Ï´Ù!: (" << this->transactionID << ")";
+    }
+    else {
+        cout << "[Constructor]New transaction Created: (" << this->transactionID << ")";
+    }
 
-    // transfer ì…ë‹ˆë‹¤.
+    // transfer ÀÔ´Ï´Ù.
     if (accountNumberFrom->getPrimary(serialNumber) == true && accountNumberTo->getPrimary(serialNumber) == true) {
-        cout << "Transfer fee :" << fee->getatFeeBetPrim() << endl;
-        if (accountNumberFrom->getbalance() > fee->getatFeeBetPrim()) {
-            accountNumberFrom->setbalance(accountNumberFrom->getbalance() - fee->getatFeeBetPrim());
-            cout << " how much money? " << endl;
-            int money;
-            cin >> money;
-            if (accountNumberFrom->getbalance() >= money) {
-                accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
-                accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
+        if (serialNumber->getKR() == true) {
+            cout << "ÀÌÃ¼ ¼ö¼ö·á :" << fee->getatFeeBetPrim() << endl;
+        }
+        else {
+            cout << "Transfer fee :" << fee->getatFeeBetPrim() << endl;
+        }
+        int transferfee = fee->getatFeeBetPrim();
+        if (serialNumber->getKR() == true) {
+            cout << "ÀÌÃ¼ÇÏ½Ç ±İ¾×À» ÀÔ·ÂÇÏ½Ê½Ã¿À. " << endl;
+        }
+        else {
+            cout << " Transfer amount " << endl;
+        }
 
-                cout << " Successfully transfered " << money << " from account " << accountNumberFrom->getAccountNum() << " to "  << accountNumberTo->getAccountNum() << endl;
-                ofstream history("transaction_history.txt");
-                if (history.is_open()) {
-                    history << "Transaction ID : " << this->transactionID << "Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
-                    history.close();
-                }
-                ofstream receipt("receipt.txt");
-                if (receipt.is_open()) {
-                    receipt << "Transaction ID : " << this->transactionID << "Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
-                    receipt.close();
-                }
+        int money;
+        cin >> money;
+        if (accountNumberFrom->getbalance() >= money + transferfee) {
+            accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money - transferfee);
+            accountNumberTo->setbalance(accountNumberTo->getbalance() + money);
+            if (serialNumber->getKR() == true) {
+                cout << "¼º°øÀûÀ¸·Î " << money << "¿øÀÌ °èÁÂ¹øÈ£ " << accountNumberFrom->getAccountNum() << "¿¡¼­ " << accountNumberTo->getAccountNum() << "À¸·Î ÀÌÃ¼µÇ¾ú½À´Ï´Ù." << endl;
             }
             else {
-                cout << " Not enough money." << endl;
+                cout << "Successfully transferred " << money << " from account " << accountNumberFrom->getAccountNum() << " to " << accountNumberTo->getAccountNum() << endl;
+            }
+            ofstream history("transaction_history.txt", ios_base::app);
+            if (history.is_open()) {
+                history << "Transaction ID : " << this->transactionID << " Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
+                history.close();
+            }
+            ofstream receipt("receipt.txt", ios::app);
+            if (receipt.is_open()) {
+                receipt << "Transaction ID : " << this->transactionID << " Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
+                receipt.close();
             }
         }
-        else if (accountNumberFrom->getPrimary(serialNumber) != accountNumberTo->getPrimary(serialNumber)) {
-            cout << "Transfer fee : " << fee->getatFeeBetPNonp() << endl;
-            if (accountNumberFrom->getbalance() > fee->getatFeeBetPNonp()) {
-                accountNumberFrom->setbalance(accountNumberFrom->getbalance() - fee->getatFeeBetPNonp());
-                cout << " how much money? " << endl;
-                int money;
-                cin >> money;
-                if (accountNumberFrom->getbalance() >= money) {
-                    accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
-                    accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
-                    cout << " Successfully transfered " << money << " from account " << accountNumberFrom->getAccountNum() << " to "  << accountNumberTo->getAccountNum() << endl;
-                    ofstream history("transaction_history.txt");
-                    if (history.is_open()) {
-                        history << "Transaction ID : " << this->transactionID << " Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
-                        history.close();
-                    }
-                    ofstream receipt("receipt.txt");
-                    if (receipt.is_open()) {
-                        receipt << "Transaction ID : " << this->transactionID << " Transfer from" << accountNumberFrom->getAccountNum() << "Transfer to" << accountNumberTo->getAccountNum() << "amount" << money;
-                    }
-                    receipt.close();
-                }
-
-                else {
-                    cout << " Not enough money." << endl;
-                }
+        else {
+            if (serialNumber->getKR() == true) {
+                cout << "ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù." << endl;
             }
             else {
-                cout << "Transfer fee : " << fee->getatFeeBetNonp() << endl;
-                if (accountNumberFrom->getbalance() > fee->getatFeeBetNonp()) {
-                    accountNumberFrom->setbalance(accountNumberFrom->getbalance() - fee->getatFeeBetNonp());
-                    cout << " how much money? " << endl;
-                    int money;
-                    cin >> money;
-                    if (accountNumberFrom->getbalance() >= money) {
-                        accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money);
-                        accountNumberTo->setbalance(accountNumberTo->getbalance() - money);
-                        cout << " Successfully transfered " << money << " from account " << accountNumberFrom->getAccountNum() << " to "  << accountNumberTo->getAccountNum() << endl;
-                        ofstream history("transaction_history.txt");
-                        if (history.is_open()) {
-                            history << "Transaction ID : " << this->transactionID << " Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount " << money;
-                            history.close();
-                        }
-                        ofstream receipt("receipt.txt");
-                        if (receipt.is_open()) {
-                            receipt << "Transaction ID : " << this->transactionID << " Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount " << money;
-                        }
-                        receipt.close();
-                    }
-                    else {
-                        cout << " Not enough money." << endl;
-                    }
-                }
+                cout << "Not enough funds." << endl;
             }
         }
     }
+    else if (accountNumberFrom->getPrimary(serialNumber) != accountNumberTo->getPrimary(serialNumber)) {
+        if (serialNumber->getKR() == true) {
+            cout << "ÀÌÃ¼ ¼ö¼ö·á : " << fee->getatFeeBetPNonp() << endl;
+        }
+        else {
+            cout << "Transfer fee : " << fee->getatFeeBetPNonp() << endl;
+        }
+        int transferfee = fee->getatFeeBetPNonp();
+        if (serialNumber->getKR() == true) {
+            cout << "ÀÌÃ¼ÇÏ½Ç ±İ¾×À» ÀÔ·ÂÇÏ½Ê½Ã¿À. " << endl;
+        }
+        else {
+            cout << " Transfer amount " << endl;
+        }
+
+        int money;
+        cin >> money;
+        if (accountNumberFrom->getbalance() >= money + transferfee) {
+            accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money - transferfee);
+            accountNumberTo->setbalance(accountNumberTo->getbalance() + money);
+            if (serialNumber->getKR() == true) {
+                cout << "¼º°øÀûÀ¸·Î " << money << "¿øÀÌ °èÁÂ¹øÈ£ " << accountNumberFrom->getAccountNum() << "¿¡¼­ " << accountNumberTo->getAccountNum() << "À¸·Î ÀÌÃ¼µÇ¾ú½À´Ï´Ù." << endl;
+            }
+            else {
+                cout << "Successfully transferred " << money << " from account " << accountNumberFrom->getAccountNum() << " to " << accountNumberTo->getAccountNum() << endl;
+            }
+            ofstream history("transaction_history.txt", ios_base::app);
+            if (history.is_open()) {
+                history << "Transaction ID : " << this->transactionID << "Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
+                history.close();
+            }
+            ofstream receipt("receipt.txt", ios::app);
+            if (receipt.is_open()) {
+                receipt << "Transaction ID : " << this->transactionID << "Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
+                receipt.close();
+            }
+        }
+        else {
+            if (serialNumber->getKR() == true) {
+                cout << "ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù." << endl;
+            }
+            else {
+                cout << "Not enough funds." << endl;
+            }
+        }
+    }
+    else {
+        if (serialNumber->getKR() == true) {
+            cout << "ÀÌÃ¼ ¼ö¼ö·á : " << fee->getatFeeBetNonp() << endl;
+        }
+        else {
+            cout << "Transfer fee : " << fee->getatFeeBetNonp() << endl;
+        }
+        int transferfee = fee->getatFeeBetNonp();
+        if (serialNumber->getKR() == true) {
+            cout << "ÀÌÃ¼ÇÏ½Ç ±İ¾×À» ÀÔ·ÂÇÏ½Ê½Ã¿À. " << endl;
+        }
+        else {
+            cout << "Transfer amount " << endl;
+        }
+
+        int money;
+        cin >> money;
+        if (accountNumberFrom->getbalance() >= money + transferfee) {
+            accountNumberFrom->setbalance(accountNumberFrom->getbalance() - money - transferfee);
+            accountNumberTo->setbalance(accountNumberTo->getbalance() + money);
+            if (serialNumber->getKR() == true) {
+                cout << "¼º°øÀûÀ¸·Î " << money << " ¿øÀ» °èÁÂ¹øÈ£ " << accountNumberFrom->getAccountNum() << " ¿¡¼­ " << accountNumberTo->getAccountNum() << " À¸·Î ÀÌÃ¼ÇÏ¿´½À´Ï´Ù." << endl;
+            }
+            else {
+                cout << "Successfully transfered " << money << " from account " << accountNumberFrom->getAccountNum() << " to " << accountNumberTo->getAccountNum() << endl;
+            }
+            ofstream history("transaction_history.txt", ios_base::app);
+            if (history.is_open()) {
+                history << "Transaction ID : " << this->transactionID << "Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
+                history.close();
+            }
+            ofstream receipt("receipt.txt", ios::app);
+            if (receipt.is_open()) {
+                receipt << "Transaction ID : " << this->transactionID << "Transfer from " << accountNumberFrom->getAccountNum() << " Transfer to " << accountNumberTo->getAccountNum() << " amount : " << money;
+                receipt.close();
+            }
+        }
+        else {
+            if (serialNumber->getKR() == true) {
+                cout << "ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù." << endl;
+            }
+            else {
+                cout << "Not enough funds." << endl;
+            }
+        }
+    }    
 }

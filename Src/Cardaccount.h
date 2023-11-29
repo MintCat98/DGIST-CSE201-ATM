@@ -14,7 +14,7 @@ class ATM;
 
 class Account {
 private:
-    int accountNum;
+    long long accountNum;
     Bank* primaryBank;
     Customer* ownedBy;
     int balance;
@@ -31,11 +31,11 @@ private:
 
 public:
     // Account
-    Account(string bankName, string userName, int accountNum, int funds);
+    Account(string bankName, string userName, long long accountNum, int funds);
     virtual ~Account();
 
     // Get Methods
-    int getAccountNum() const;
+    long long getAccountNum() const;
     string getBankName() const;
     string getOwner() const;
     int getBalance() const;
@@ -60,13 +60,13 @@ private:
     }
 public:
     // Card
-    Card(string bankName, string userName, int accountNum, int funds, string password) : Account(bankName, userName, accountNum, funds), password_(password) {}
+    Card(string bankName, string userName, long long accountNum, int funds, string password) : Account(bankName, userName, accountNum, funds), password_(password) {}
 
     bool verifyPassword(string inputPassword);
 
     bool accessAccount();
 
 
-    int getCardNum();
+    long long getCardNum();
     virtual ~Card();
 };

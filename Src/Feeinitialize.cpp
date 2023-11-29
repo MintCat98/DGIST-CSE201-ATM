@@ -4,29 +4,29 @@
 Fee::Fee(string fee) {
     feename = fee;
     int dfnpb, dfpb, wfpb, wfnpb, atfbpb, atfbpnpb, atfbnpb, ctfab;
-    cout << "Set deposit fee for non-primary banks" << endl;
-    cin >> dfnpb;
+    cout << "1. Deposit fee for non-primary banks\n";
+    cout << "  > "; cin >> dfnpb;
     dpFeeNonp = dfnpb;
-    cout << "Set deposit fee for primary banks" << endl;
-    cin >> dfpb;
+    cout << "2. Deposit fee for primary banks\n";
+    cout << "  > "; cin >> dfpb;
     dpFeePrim = dfpb;
-    cout << "Set withdrawal fee for a primary bank" << endl;
-    cin >> wfpb;
+    cout << "3. Withdrawal fee for a primary bank\n";
+    cout << "  > "; cin >> wfpb;
     wdFeePrim = wfpb;
-    cout << "Set withdrawal fee for non-primary banks" << endl;
-    cin >> wfnpb;
+    cout << "4. Withdrawal fee for non-primary banks\n";
+    cout << "  > "; cin >> wfnpb;
     wdFeeNonp = wfnpb;
-    cout << "Set Account Transfer fee between primary banks" << endl;
-    cin >> atfbpb;
+    cout << "5. Account Transfer fee between primary banks\n";
+    cout << "  > "; cin >> atfbpb;
     atFeeBetPrim = atfbpb;
-    cout << "Set Account Transfer fee between primary and non-primary banks. " << endl;
-    cin >> atfbpnpb;
+    cout << "6. Account Transfer fee between primary and non-primary banks\n";
+    cout << "  > "; cin >> atfbpnpb;
     atFeeBetPNonp = atfbpnpb;
-    cout << "Set Account Transfer fee between non-primary banks." << endl;
-    cin >> atfbnpb;
+    cout << "7. Account Transfer fee between non-primary banks\n";
+    cout << "  > "; cin >> atfbnpb;
     atFeeBetNonp = atfbnpb;
-    cout << "Set Cash Transfer fee to any bank." << endl;
-    cin >> ctfab;
+    cout << "8. Cash Transfer fee to any bank\n";
+    cout << "  > "; cin >> ctfab;
     ctFeeAny = ctfab;
 }
 

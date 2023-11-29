@@ -21,27 +21,24 @@ int main() {
     // Containers
     map<string, Bank*> banks;       // Name: Bank
     map<int, ATM*> ATMs;            // SN: ATM
-    map<int, Card*> cardMap;        // No: Card
+    map<long long, Card*> cardMap;        // No: Card
     //map<int, Account *> accountMap;  // No: Account
 
     // Bank
     int numOfBank;
     cout << "\n[Init] Please init bank instances.\n";
-    cout << " - Enter the number of Banks: ";
-    cin >> numOfBank;
+    cout << " - Enter the number of Banks: "; cin >> numOfBank;
     for (int i = 0; i < numOfBank; i++) {
         // Instanciate Banks!
         string bankname;
-        cout << " - Enter the name of Bank: ";
-        cin >> bankname;
+        cout << " - Enter the name of Bank: "; cin >> bankname;
         banks[bankname] = new Bank(bankname);
     }
 
     // ATM
     int numOfATM;
     cout << "\n[Init] Please init ATM instances.\n";
-    cout << " - Enter the number of ATMs: ";
-    cin >> numOfATM;
+    cout << " - Enter the number of ATMs: "; cin >> numOfATM;
     for (int i = 0; i < numOfATM; i++) {
         // Init Inputs
         cout << "\n[ATM Init.] Please insert below.\n";
@@ -52,8 +49,7 @@ int main() {
         map<int, int> cash;
         bool validBank = false;
         do {
-            cout << "Primary Bank      : ";
-            cin >> bank;
+            cout << "Primary Bank      : "; cin >> bank;
             if (banks.find(bank) != banks.end()) {
                 validBank = true;
             }
@@ -64,8 +60,7 @@ int main() {
 
         bool duplicateSerial = false;
         do {
-            cout << "Serial Number     : ";
-            cin >> sn;
+            cout << "Serial Number     : "; cin >> sn;
             // Check if the serial number already exists in the ATMs map
             if (ATMs.find(sn) != ATMs.end()) {
                 cout << "[ValueError] Serial number already exists! Enter a valid number!\n";
@@ -77,7 +72,7 @@ int main() {
         } while (duplicateSerial);
         bool realsingle;
         while (true) {
-            cout << "Type(S/M)         : "; cin >> single;
+            cout << "Type(S - Single / M - Multi)         : "; cin >> single;
             if (single == "s" || single == "S") {
                 realsingle = true;
                 break;
@@ -92,8 +87,7 @@ int main() {
         }
 
         string tf;
-        cout << "Bilingual(T/F)    : ";
-        cin >> tf;
+        cout << "Bilingual(T/F)    : "; cin >> tf;
         if (tf == "T" || tf == "t") {
             bilang = true;
         }
@@ -117,21 +111,7 @@ int main() {
 
     // Card
     // ADMIN's Card
-    cout << endl;
-    int admin = 10;
-    cout << "Set the admin's Card Number." << endl;
-    cin >> admin ;
-    string adminbank = "none";
-    string username = "user";
-    int funds = 123456789;
-    banks[adminbank] = new Bank(adminbank);
-
-    string adminpassword;
-    cout << "Set the admin's password" << endl;
-    cin >> adminpassword;
-    cardMap[admin] = new Card(adminbank, username, admin, funds, adminpassword);
-    cout << "Admin created" << endl;
-    cout << endl;
+    int admin = 999999;
 
     // Customers' Cards
     int numOfAccounts;
@@ -141,7 +121,7 @@ int main() {
     for (int i = 0; i < numOfAccounts; i++) {
         cout << "\n[Account/Card Init.] Please insert below.\n";
         string bank, username;
-        int accountnum;
+        long long accountnum;
         int funds;
         string issue;
         string password;
@@ -243,10 +223,10 @@ int main() {
         else if (selected == 1) { // ATM Session
             int sn;
             ATM* currentATM;
-            ofstream history("transaction_history.txt"); // 파일 열기
+            ofstream history("transaction_history.txt", ios::app);// 파일 열기
             ofstream receipt("receipt.txt"); // 파일 열기
             while (true) {
-                cout << "[ATM] Select an ATM. Serial Numbers: ";
+                cout << "\n[ATM] Select an ATM. Serial Numbers: ";
                 cin >> sn;
                 auto find = ATMs.find(sn);
                 if (find != ATMs.end()) { // Exists
@@ -258,44 +238,42 @@ int main() {
                 }
             }
             // Insert a Card
-            int no;
+            long long no;
             Card* currentCard;
             while (true) {
-                cout << "[Card] Insert a card to start: ";
-                cin >> no;
+                cout << "[Card] Insert a card to start: "; cin >> no;
                 auto find = cardMap.find(no);
-                string cardpassword;
-                cout << "Password : ";
-                cin >> cardpassword;
-          
-                if (no == admin && cardMap[no]->verifyPassword(cardpassword) == true) {
-                    // Admin
+                // Check Admin
+                if (no == admin) { // Admin
                     currentATM->adminMenu();
                     break;
-
-
                 }
-                else if (cardMap[no]->verifyPassword(cardpassword) == true && find != cardMap.end()) { // Exists
-                    
-                    if (currentATM->isSingleBank() == true) {
-                        if (cardMap[no]->getPrimary(currentATM) == true) {
+                else { // Customer
+                    string cardpassword;
+                    cout << "       PW: "; cin >> cardpassword;
+                    if (cardMap[no]->verifyPassword(cardpassword) && find != cardMap.end()) { // Exists
+                        if (currentATM->isSingleBank()) {
+                            if (cardMap[no]->getPrimary(currentATM)) {
+                                currentCard = cardMap[no];
+                                break;
+                            }
+                            else {
+                                cout << "[ValueError] This card cannot be used in this ATM. Try another card.\n";
+                            }
+                        }
+                        else {
                             currentCard = cardMap[no];
                             break;
                         }
-                        else {
-                            cout << "[Error] This card cannot be used in this ATM. Try another card." << endl;
-                        }
                     }
-                    else {
-                        currentCard = cardMap[no];
-                        break;
+                    else { // Error
+                        cout << "[ValueError] Invalid card! Insert a valid card!\n";
                     }
-                }
-                else { // Error
-                    cout << "[Error] Invalid card! Insert a valid card!\n";
                 }
             }
-
+            if (no == admin) {
+                continue;
+            }
             // Set Language
             cout << "=================================\n";
             if (currentATM->isBilingual()) { // If bilingual
@@ -306,11 +284,11 @@ int main() {
             }
             cout << "=================================\n";
             // Divide Language
-            if (currentATM->getKR() == true) {
+            if (currentATM->getKR()) {
                 // KR version
                 while (selected != 6) {
                     // View Options
-                    cout << "[정수로 옵션을 선택해주세요.]\n";
+                    cout << "\n[정수로 옵션을 선택해주세요.]\n";
                     cout << " 1) 예금\n";
                     cout << " 2) 출금\n";
                     cout << " 3) 현금 이체\n";
@@ -330,7 +308,7 @@ int main() {
                     }
                     else if (selected == 3) {
                         // Cash Transfer
-                        int accountNum;
+                        long long accountNum;
                         Card* currentAccount;
                         string type = "cashtransfer";
                         while (true) {
@@ -349,7 +327,7 @@ int main() {
                     }
                     else if (selected == 4) {
                         // Account Transfer
-                        int accountNum;
+                        long long accountNum;
                         Card* currentAccount;
                         string type = "cashAccount";
                         while (true) {
@@ -388,12 +366,18 @@ int main() {
                     }
                     else if (selected == 6) {
                         // Exit
+                        if (history.is_open()) {
+                            history.close();
+                        }
+                        if (receipt.is_open()) {
+                            receipt.close();
+                        }
                         currentATM->deleteFile();
                         cout << " Exit  " << endl;
                         break;
                     }
                     else {
-                        cout << "[에러] 제대로된 값을 입력하세요. (1) ~ (6).!\n\n";
+                        cout << "[에러] 올바른 값을 입력하세요. (1) ~ (6).!\n\n";
                     }
                 }
             }
@@ -422,7 +406,7 @@ int main() {
                     }
                     else if (selected == 3) {
                         // Cash Transfer
-                        int accountNum;
+                        long long accountNum;
                         Card* currentAccount;
                         string type = "cashtransfer";
                         while (true) {
@@ -441,7 +425,7 @@ int main() {
                     }
                     else if (selected == 4) {
                         // Account Transfer
-                        int accountNum;
+                        long long accountNum;
                         Card* currentAccount;
                         string type = "cashAccount";
                         while (true) {
@@ -462,14 +446,12 @@ int main() {
                         // Print a Receipt
                         vector<string> data;
                         ifstream file("receipt.txt");
-
                         if (file.is_open()) {
                             string line;
                             while (getline(file, line)) {
                                 data.push_back(line);
                             }
                             cout << "Data read from file:\n";
-
                             for (const auto& line : data) {
                                 cout << line << endl;
                             }
@@ -482,6 +464,9 @@ int main() {
                         // Exit
                         if (receipt.is_open()) {
                             receipt.close();
+                        }
+                        if (history.is_open()) {
+                            history.close();
                         }
                         currentATM->deleteFile();
                         cout << " Exit  " << endl;
@@ -512,11 +497,6 @@ int main() {
         delete atm.second;
     }
     ATMs.clear();
-    // Delete Accounts
-//    for (auto& account: accountMap) {
-//        delete account.second;
-//    }
-//    accountMap.clear();
     // Delete Cards
     for (auto& card : cardMap) {
         delete card.second;

@@ -31,6 +31,6 @@ bool Card::accessAccount() {
     }
 }
 
-int Card::getCardNum() {
+long long Card::getCardNum() {
     return getAccountNum();
 }

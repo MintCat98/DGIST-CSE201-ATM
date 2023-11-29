@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-Account::Account(string bankName, string userName, int accountNum, int funds) {
+Account::Account(string bankName, string userName, long long accountNum, int funds) {
     cout << "Account created" << endl;
     this->bankName_ = bankName;
     this->userName_ = userName;
@@ -22,7 +22,7 @@ string Account::getOwner() const {
     return this->userName_;
 }
 
-int Account::getAccountNum() const {
+long long Account::getAccountNum() const {
     return this->accountNum_;
 }
 
