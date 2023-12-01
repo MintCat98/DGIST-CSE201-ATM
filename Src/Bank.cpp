@@ -10,9 +10,6 @@ Bank::Bank(string name) {
     for (int i = 0; i < 100; i++) {
         atmList[i] = nullptr;
     }
-    for (int i = 0; i < 1000; i++) {
-        customerList[i] = nullptr;
-    }
 
     cout << "[Const-B]" << this->bankName << " Bank is created." << endl;
 }
@@ -52,32 +49,4 @@ void Bank::getATMList() {
         }
     }
     cout << endl;
-}
-
-
-void Bank::newCustomer(Customer* newCustomer) {
-    for (int i = 0; i < 1000; i++) {
-        if (customerList[i] == nullptr) {
-            customerList[i] = newCustomer;
-            break;
-        }
-    }
-}
-
-void Bank::deleteCustomer(Customer* targetCustomer) {
-    for (int i = 0; i < 1000; i++) {
-        if (customerList[i] == targetCustomer) {
-            customerList[i] = nullptr;
-            break;
-        }
-    }
-}
-
-void Bank::getCustomerList() {
-    for (int i = 0; i < 1000; i++) {
-        if (customerList[i] != nullptr) {
-            customerList[i]->getName();
-            cout << "\n";
-        }
-    }
 }

@@ -10,18 +10,17 @@
 using namespace std;
 
 class ATM;
-class Card;
 class Account;
 class Card;
 class Fee;
 class Transaction {
 private:
     int transactionID;
-    int cardNum;
+    long long cardNum;
     int serialNum;
     string transType;
     int transAmount;
-    
+
 public:
     Transaction(ATM* serialNumber, Card* cardNumber, string type, Fee* fee);
 
@@ -33,7 +32,7 @@ public:
     void deposit(ATM* serialNumber, Card* cardNumber, Fee* fee);
 
     void withdrawal(ATM* serialNumber, Card* cardNumber, Fee* fee);
-    
+
 
 
     void addcash(ATM* serialNumber, Card* cardNumber, Fee* fee);

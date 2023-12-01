@@ -1,15 +1,5 @@
 #include "Cardaccount.h"
 
-/*
-Card::Card() :cardNum() {
-    cout << "[Const - C] A new card created" << endl;
-}
-*/
-/*
-int Card::getCardNum() {
-    return cardNum;
-}
-*/
 
 Card::~Card() {
     cout << "[Dest-C] A card is deleted" << endl;

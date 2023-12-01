@@ -77,13 +77,6 @@ build CMakeFiles/Src.dir/Card.cpp.o: CXX_COMPILER__Src_unscanned_Debug /Users/i0
   OBJECT_DIR = CMakeFiles/Src.dir
   OBJECT_FILE_DIR = CMakeFiles/Src.dir
 
-build CMakeFiles/Src.dir/Customer.cpp.o: CXX_COMPILER__Src_unscanned_Debug /Users/i0j/gitrepo/project/DGIST-CSE201-ATM/Src/Customer.cpp || cmake_object_order_depends_target_Src
-  DEP_FILE = CMakeFiles/Src.dir/Customer.cpp.o.d
-  FLAGS = -g -std=gnu++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
-  INCLUDES = -I/Users/i0j/gitrepo/project/DGIST-CSE201-ATM/Src/.
-  OBJECT_DIR = CMakeFiles/Src.dir
-  OBJECT_FILE_DIR = CMakeFiles/Src.dir
-
 build CMakeFiles/Src.dir/main.cpp.o: CXX_COMPILER__Src_unscanned_Debug /Users/i0j/gitrepo/project/DGIST-CSE201-ATM/Src/main.cpp || cmake_object_order_depends_target_Src
   DEP_FILE = CMakeFiles/Src.dir/main.cpp.o.d
   FLAGS = -g -std=gnu++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
@@ -113,7 +106,7 @@ build CMakeFiles/Src.dir/Feeinitialize.cpp.o: CXX_COMPILER__Src_unscanned_Debug 
 #############################################
 # Link the executable Src
 
-build Src: CXX_EXECUTABLE_LINKER__Src_Debug CMakeFiles/Src.dir/Account.cpp.o CMakeFiles/Src.dir/ATM.cpp.o CMakeFiles/Src.dir/Bank.cpp.o CMakeFiles/Src.dir/Card.cpp.o CMakeFiles/Src.dir/Customer.cpp.o CMakeFiles/Src.dir/main.cpp.o CMakeFiles/Src.dir/Transaction.cpp.o CMakeFiles/Src.dir/Feeinitialize.cpp.o
+build Src: CXX_EXECUTABLE_LINKER__Src_Debug CMakeFiles/Src.dir/Account.cpp.o CMakeFiles/Src.dir/ATM.cpp.o CMakeFiles/Src.dir/Bank.cpp.o CMakeFiles/Src.dir/Card.cpp.o CMakeFiles/Src.dir/main.cpp.o CMakeFiles/Src.dir/Transaction.cpp.o CMakeFiles/Src.dir/Feeinitialize.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk
   OBJECT_DIR = CMakeFiles/Src.dir
   POST_BUILD = :

@@ -2,13 +2,11 @@
 #include <string>
 #include <iostream>
 #include "Bank.h"
-#include "Customer.h"
 #include "Transaction.h"
 #include "ATM.h"
 
 using namespace std;
 class Bank;
-class Customer;
 class Transaction;
 class ATM;
 
@@ -16,7 +14,6 @@ class Account {
 private:
     long long accountNum;
     Bank* primaryBank;
-    Customer* ownedBy;
     int balance;
     Transaction* accountHistory; // dynamic allocation
     bool isCardPrimary;

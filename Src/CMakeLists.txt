@@ -12,8 +12,6 @@ add_executable(Src
         Bank.cpp
         Bank.h
         Card.cpp
-        Customer.cpp
-        Customer.h
         main.cpp
         Transaction.cpp
         Transaction.h

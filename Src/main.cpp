@@ -72,7 +72,7 @@ int main() {
         } while (duplicateSerial);
         bool realsingle;
         while (true) {
-            cout << "Type(S - Single / M - Multi)         : "; cin >> single;
+            cout << "Type(S/M)         : "; cin >> single;
             if (single == "s" || single == "S") {
                 realsingle = true;
                 break;
@@ -179,6 +179,10 @@ int main() {
                 cout << "<List of ATMs>\n";
                 cout << " - S/N : " << atm->second->getSerialNum() << "\n";
                 cout << " - Cash: " << atm->second->getCashAmount() << "\n";
+                cout << " - 1000 won : " << atm->second->get1000won() << "\n";
+                cout << " - 5000 won : " << atm->second->get5000won() << "\n";
+                cout << " - 10000 won : " << atm->second->get10000won() << "\n";
+                cout << " - 50000 won : " << atm->second->get50000won() << "\n";
             }
         }
         else if (selected == 3) { // Account-Info.
@@ -255,29 +259,31 @@ int main() {
                     passwordpoint:
                     string cardpassword;
                     cout << "       PW: "; cin >> cardpassword;
-                    if (cardMap[no]->verifyPassword(cardpassword) == false) {
-                        attempt++;
-                        cout << "Wrong password. Attempt : " << attempt << endl;
-                        if (attempt == 3) {
-                            cout << "Failed to start session. The number of attempts reached 3." << endl;
-                            cout << "Your card has been returned." << endl;
-                            goto cardcheckpoint;
+                    if (find != cardMap.end()) {
+                        if (cardMap[no]->verifyPassword(cardpassword) == false) {
+                            attempt++;
+                            cout << "Wrong password. Attempt : " << attempt << endl;
+                            if (attempt == 3) {
+                                cout << "Failed to start session. The number of attempts reached 3." << endl;
+                                cout << "Your card has been returned." << endl;
+                                goto cardcheckpoint;
+                            }
+                            goto passwordpoint;
                         }
-                        goto passwordpoint;
-                    }
-                    else if (cardMap[no]->verifyPassword(cardpassword) ==true && find != cardMap.end()) { // Exists
-                        if (currentATM->isSingleBank()) {
-                            if (cardMap[no]->getPrimary(currentATM)) {
+                        else if (cardMap[no]->verifyPassword(cardpassword) == true) { // Exists
+                            if (currentATM->isSingleBank()) {
+                                if (cardMap[no]->getPrimary(currentATM)) {
+                                    currentCard = cardMap[no];
+                                    break;
+                                }
+                                else {
+                                    cout << "[ValueError] This card cannot be used in this ATM. Try another card.\n";
+                                }
+                            }
+                            else {
                                 currentCard = cardMap[no];
                                 break;
                             }
-                            else {
-                                cout << "[ValueError] This card cannot be used in this ATM. Try another card.\n";
-                            }
-                        }
-                        else {
-                            currentCard = cardMap[no];
-                            break;
                         }
                     }
                     else { // Error
