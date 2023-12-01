@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Bank">
+    <Position X="7.5" Y="0.5" Width="3" />
+    <AssociationLine Name="atmList" Type="ATM">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.082" Y="0.308" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AQAAACAAAAAAAAAAAAAQAAAAAAAAEAAAAMAEAAAAEAA=</HashCode>
+      <FileName>Bank.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="atmList" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ATM">
+    <Position X="6.5" Y="4.5" Width="5" />
+    <TypeIdentifier>
+      <HashCode>gEAEAIEIgBgBAAAAIg2AAAgEVEIkEAEAEAgQACgIigA=</HashCode>
+      <FileName>ATM.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Transaction">
+    <Position X="12.5" Y="9.25" Width="7" />
+    <TypeIdentifier>
+      <HashCode>AACCAAAiAAACAAEAAAgCAAAEAAAAAAAAAAAEAgBAAAA=</HashCode>
+      <FileName>Transaction.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Account">
+    <Position X="13.25" Y="0.5" Width="5.5" />
+    <AssociationLine Name="accountHistory" Type="Transaction">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.732" Y="6.549" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAgDAAEAAAAAAAAAACAAAYAAAwMAIAEAQCIQEAAEA=</HashCode>
+      <FileName>Cardaccount.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="accountHistory" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Card">
+    <Position X="13" Y="6" Width="6" />
+    <TypeIdentifier>
+      <HashCode>ABBAAAAgAAAAAAAAAAAAAAAAAAAAAAAAACBCAgAAAAA=</HashCode>
+      <FileName>Cardaccount.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
