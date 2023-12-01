@@ -125,3 +125,11 @@ bool ATM::isSingleBank() {
     return singleBank;
 }
 
+
+void ATM::setWdsuccess(bool torf) {
+    this->withdrawalsuccess = torf;
+}
+
+bool ATM::getWdsuccess() {
+    return this->withdrawalsuccess;
+}

@@ -22,9 +22,13 @@ private:
     vector<Transaction*> transHistory;
     static int atmIDs;
     static int transNum;
+    bool withdrawalsuccess;
 
 
 public:
+    void setWdsuccess(bool torf);
+    bool getWdsuccess();
+
     // ATM
     ATM(Bank* primary, int sNum, bool single, bool lang, map<int, int> cash);
     ~ATM();
@@ -66,8 +70,8 @@ public:
         string line;
         while (getline(historyFile, line)) {
             cout << line << endl;
-            }
-            historyFile.close();
+        }
+        historyFile.close();
     }
 
     void adminMenu() {

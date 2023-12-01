@@ -11,10 +11,10 @@ Transaction::Transaction(ATM* serialNumber, Card* cardNumber, string type, Fee* 
     serialNumber->setTransNum(serialNumber->getTransNum() + 1);
     // 거래 번호를 1 더해서 저장해 둔다.
     if (serialNumber->getKR() == true) {
-        cout <<"[생성자] 새로운 거래가 생성되었습니다!: (" << this->transactionID << ")" << endl;
+        cout << "[생성자] 새로운 거래가 생성되었습니다!: (" << this->transactionID << ")" << endl;
     }
     else {
-        cout << "[Constructor]New transaction Created: (" << this->transactionID << ")"<< endl;
+        cout << "[Constructor]New transaction Created: (" << this->transactionID << ")" << endl;
     }
 
     // deposit or withdrawal
@@ -45,7 +45,7 @@ void Transaction::deposit(ATM* serialNumber, Card* cardNumber, Fee* fee) {
     }
     int cashorcheck;
     cin >> cashorcheck;
-    if (cashorcheck == 0 ) {
+    if (cashorcheck == 0) {
         this->addcash(serialNumber, cardNumber, fee);
     }
     else if (cashorcheck == 1) {
@@ -80,7 +80,7 @@ void Transaction::addcash(ATM* serialNumber, Card* cardNumber, Fee* fee) {
         else {
             cout << " The fee is " << feemoney << "won. Your card is primary." << endl;
         }
-        
+
     }
     else {
         // 아닐 때, fee를 불러온다.
@@ -106,9 +106,9 @@ void Transaction::addcash(ATM* serialNumber, Card* cardNumber, Fee* fee) {
             cout << " 성공적으로  " << balanceadd << "원을 " << cardNumber->getAccountNum() << "에 입금하였습니다." << endl;
         }
         else {
-            cout << " Successfully deposited " << balanceadd << " on card number" << cardNumber->getAccountNum() << endl; 
+            cout << " Successfully deposited " << balanceadd << " on card number" << cardNumber->getAccountNum() << endl;
         }
-        
+
         // card의 account 부분의 balance를 교체한다. 이는 기존 잔액에서 추가 잔액을 더하고, 수수료를 뺀 값이다.
         cardNumber->setbalance(cardNumber->getbalance() + balanceadd - feemoney);
 
@@ -159,17 +159,17 @@ void Transaction::addcheck(ATM* serialNumber, Card* cardNumber, Fee* fee) {
                 cout << "Put the value of Check." << endl;
             }
             int value;
-            do{
+            do {
                 cin >> value;
-                if (value < 100000){
+                if (value < 100000) {
                     if (serialNumber->getKR() == true) {
                         cout << "수표의 최소 금액은 100,000원부터입니다. 다시 입력하십시오.\n";
                     }
-                    else{
-                        cout<< "Minimum value of the check is 100,000won. Try again.\n";
+                    else {
+                        cout << "Minimum value of the check is 100,000won. Try again.\n";
                     }
                 }
-            }while (value < 100000);
+            } while (value < 100000);
             balanceadd += value;
         }
         int feemoney = 0; // 수수료 책정
@@ -182,7 +182,7 @@ void Transaction::addcheck(ATM* serialNumber, Card* cardNumber, Fee* fee) {
             else {
                 cout << " The fee is " << feemoney << "won. Your card is primary." << endl;
             }
-            
+
         }
         else {
             // 아닐 때, fee를 불러온다.
@@ -216,7 +216,11 @@ void Transaction::addcheck(ATM* serialNumber, Card* cardNumber, Fee* fee) {
     }
 }
 
+
+
+
 void Transaction::withdrawal(ATM* serialNumber, Card* cardNumber, Fee* fee) {
+    serialNumber->setWdsuccess(false);
     if (serialNumber->getKR() == true) {
         cout << "얼마를 찾으실 것인지 입력하여 주십시오." << endl;
     }
@@ -302,6 +306,14 @@ void Transaction::withdrawal(ATM* serialNumber, Card* cardNumber, Fee* fee) {
             cout << "Not enough money." << endl;
         }
     }
+    else if (withdrawamount > 500000) {
+        if (serialNumber->getKR() == true) {
+            cout << "오류 : 인출 최대금액 50만원을 넘는 값입니다." << endl;
+        }
+        else {
+            cout << "Error: The value exceeds the maximum withdrawal amount of 500,000 won." << endl;
+        }
+    }
     else if (withdrawamount % 1000 != 0) {
         if (serialNumber->getKR() == true) {
             cout << "1000원의 배수로 입력해 주십시오." << endl;
@@ -342,7 +354,8 @@ void Transaction::withdrawal(ATM* serialNumber, Card* cardNumber, Fee* fee) {
         else {
             cout << " Successfully withdrawn " << withdrawamount << " with card number " << cardNumber->getAccountNum() << endl;
         }
-
+        
+        serialNumber->setWdsuccess(true);
 
         ofstream history("transaction_history.txt", ios_base::app);
         if (history.is_open()) {
@@ -370,7 +383,7 @@ void Transaction::cashtransfer(ATM* serialNumber, Card* cardNumber, Fee* fee) {
     }
 
 
-    
+
     int c, oc, m, om;
     cin >> c >> oc >> m >> om;
     int billamount = c + oc + m + om;
@@ -383,13 +396,13 @@ void Transaction::cashtransfer(ATM* serialNumber, Card* cardNumber, Fee* fee) {
             cout << "올바르지 않은 금액입니다. " << endl;
         }
         else {
-            cout <<  "Error amount " << endl;
+            cout << "Error amount " << endl;
         }
 
-       
+
     }
     else {
-        
+
         cardNumber->setbalance(cardNumber->getbalance() + balanceadd - fee->getctFeeAny());
 
         serialNumber->set1000won(serialNumber->get1000won() + c);
@@ -572,5 +585,5 @@ Transaction::Transaction(ATM* serialNumber, Card* accountNumberFrom, Card* accou
                 cout << "Not enough funds." << endl;
             }
         }
-    }    
+    }
 }

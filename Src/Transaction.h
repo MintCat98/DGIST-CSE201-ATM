@@ -21,6 +21,7 @@ private:
     int serialNum;
     string transType;
     int transAmount;
+    
 public:
     Transaction(ATM* serialNumber, Card* cardNumber, string type, Fee* fee);
 
@@ -32,6 +33,8 @@ public:
     void deposit(ATM* serialNumber, Card* cardNumber, Fee* fee);
 
     void withdrawal(ATM* serialNumber, Card* cardNumber, Fee* fee);
+    
+
 
     void addcash(ATM* serialNumber, Card* cardNumber, Fee* fee);
 

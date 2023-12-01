@@ -24,7 +24,7 @@ private:
 
     string bankName_;
     string userName_;
-    int accountNum_;
+    long long accountNum_;
     int balance_;
 
 

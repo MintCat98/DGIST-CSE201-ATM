@@ -161,6 +161,7 @@ int main() {
     /*
     * [Loop Sessions]
     */
+    start:
     int selected = 0;
     while (selected != 4) {
         // Base Session
@@ -238,6 +239,7 @@ int main() {
                 }
             }
             // Insert a Card
+            cardcheckpoint:
             long long no;
             Card* currentCard;
             while (true) {
@@ -246,12 +248,24 @@ int main() {
                 // Check Admin
                 if (no == admin) { // Admin
                     currentATM->adminMenu();
-                    break;
+                    goto start;
                 }
                 else { // Customer
+                    int attempt = 0;
+                    passwordpoint:
                     string cardpassword;
                     cout << "       PW: "; cin >> cardpassword;
-                    if (cardMap[no]->verifyPassword(cardpassword) && find != cardMap.end()) { // Exists
+                    if (cardMap[no]->verifyPassword(cardpassword) == false) {
+                        attempt++;
+                        cout << "Wrong password. Attempt : " << attempt << endl;
+                        if (attempt == 3) {
+                            cout << "Failed to start session. The number of attempts reached 3." << endl;
+                            cout << "Your card has been returned." << endl;
+                            goto cardcheckpoint;
+                        }
+                        goto passwordpoint;
+                    }
+                    else if (cardMap[no]->verifyPassword(cardpassword) ==true && find != cardMap.end()) { // Exists
                         if (currentATM->isSingleBank()) {
                             if (cardMap[no]->getPrimary(currentATM)) {
                                 currentCard = cardMap[no];
@@ -284,6 +298,9 @@ int main() {
             }
             cout << "=================================\n";
             // Divide Language
+            /////////////////////////////////////////////////////////
+            int withdrawalamount = 0;
+            /////////////////////////////////////////////////////////
             if (currentATM->getKR()) {
                 // KR version
                 while (selected != 6) {
@@ -295,7 +312,7 @@ int main() {
                     cout << " 4) 계좌 이체\n";
                     cout << " 5) 영수증 출력\n";
                     cout << " 6) 종료\n";
-                    cout << " - 선택: ";cin >> selected;
+                    cout << " - 선택: "; cin >> selected;
                     if (selected == 1) {
                         //Deposit
                         string type = "deposit";
@@ -303,8 +320,17 @@ int main() {
                     }
                     else if (selected == 2) {
                         //Withdrawal
-                        string type = "withdrawal";
-                        Transaction withdrawal(currentATM, currentCard, type, fee);
+                        if (withdrawalamount == 3) {
+                            cout << "더 이상 출금이 불가능합니다." << endl;
+                        }
+                        else {
+                            string type = "withdrawal";
+                            Transaction withdrawal(currentATM, currentCard, type, fee);
+                            if (currentATM->getWdsuccess() == true) {
+                                withdrawalamount++;
+                                cout << "출금을 " << withdrawalamount << " 번 진행하였습니다." << endl;
+                            }
+                        }
                     }
                     else if (selected == 3) {
                         // Cash Transfer
@@ -401,8 +427,17 @@ int main() {
                     }
                     else if (selected == 2) {
                         //Withdrawal
-                        string type = "withdrawal";
-                        Transaction withdrawal(currentATM, currentCard, type, fee);
+                        if (withdrawalamount == 3) {
+                            cout << "You can't withdrawal more." << endl;
+                        }
+                        else {
+                            string type = "withdrawal";
+                            Transaction withdrawal(currentATM, currentCard, type, fee);
+                            if (currentATM->getWdsuccess() == true) {
+                                withdrawalamount++;
+                                cout << "You withdrawn " << withdrawalamount << " times." << endl;
+                            }
+                        }
                     }
                     else if (selected == 3) {
                         // Cash Transfer
@@ -477,7 +512,7 @@ int main() {
                     }
                 }
             }
-            
+
         }
         else {
             cout << "[ValueError] Enter a valid option among (1) ~ (4).!\n\n";
@@ -502,6 +537,12 @@ int main() {
         delete card.second;
     }
     cardMap.clear();
+    const char filename[] = "transaction_history.txt";
+    if (remove(filename) == 0) {
+        std::cout << "File '" << filename << "' deleted successfully.\n";
+    }
+    else {
+        std::perror("Error deleting file");
+    }
     return 0;
 }
-
